@@ -9,6 +9,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule, provideNativeDateAdapter } from '@angular/material/core';
 import { CalendarEvent } from '../../../models/calendar-event.model';
 import { DatePipe } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { parseLocalDate } from '../../../utils/calendar.util';
 
 export type DialogMode = 'view' | 'edit';
 
@@ -25,7 +27,7 @@ export interface CalendarDialogResult {
 
 @Component({
   selector: 'app-calendar-dialog-edit',
-  imports: [ReactiveFormsModule, MatDialogModule, MatFormFieldModule, DatePipe,
+  imports: [ReactiveFormsModule, MatDialogModule, MatFormFieldModule, DatePipe, MatIconModule,
     MatSelectModule, MatInputModule, MatDatepickerModule, MatNativeDateModule, MatButtonModule],
   providers: [provideNativeDateAdapter()],
   templateUrl: './calendar-dialog-edit.component.html',
@@ -40,8 +42,8 @@ export class CalendarDialogEditComponent {
   editEventForm = new FormGroup({
     name: new FormControl<string>(this.dialogData.event.name, Validators.required),
     reason: new FormControl<string>(this.dialogData.event.reason, Validators.required),
-    start_date: new FormControl<Date | null>(new Date(this.dialogData.event.start_date), Validators.required),
-    end_date: new FormControl<Date | null>(new Date(this.dialogData.event.end_date), Validators.required),
+    start_date: new FormControl<Date | null>(new Date(parseLocalDate(this.dialogData.event.start_date)), Validators.required),
+    end_date: new FormControl<Date | null>(new Date(parseLocalDate(this.dialogData.event.end_date)), Validators.required),
     comments: new FormControl<string>(this.dialogData.event.comments ?? '')
   });
 

@@ -7,10 +7,6 @@ export const routes: Routes = [
     loadComponent: () => import('./widgets/sign-in/sign-in.component').then(m => m.SignInComponent)
   },
   {
-    path: 'grocery-list',
-    loadComponent: () => import('./widgets/grocery-list/grocery-list.component').then(m => m.GroceryListComponent)
-  },
-  {
     path: 'calendar',
     loadComponent: () => import('./widgets/calendar/calendar.component').then(m => m.CalendarComponent)
   },

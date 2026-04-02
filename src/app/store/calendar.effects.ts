@@ -2,26 +2,17 @@ import { Injectable, inject } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { tap } from 'rxjs/operators';
-import * as GroceryListActions from './grocery-list.actions';
+import * as CalendarActions from './calendar.actions';
 
 @Injectable()
-export class GroceryListEffects {
+export class CalendarEffects {
   private actions$ = inject(Actions);
   private router = inject(Router);
-
-  routerGoToGroceryList$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(GroceryListActions.routerGoToGroceryList),
-        tap(() => this.router.navigate(['/grocery-list']))
-      ),
-    { dispatch: false }
-  );
 
   routerGoToCalendar$ = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(GroceryListActions.routerGoToCalendar),
+        ofType(CalendarActions.routerGoToCalendar),
         tap(() => this.router.navigate(['/calendar']))
       ),
     { dispatch: false }
@@ -30,7 +21,7 @@ export class GroceryListEffects {
   routerGoToSignIn$ = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(GroceryListActions.routerGoToSignIn),
+        ofType(CalendarActions.routerGoToSignIn),
         tap((data) => {
           let extras: NavigationExtras = {};
           if (data?.isTimedOut) {

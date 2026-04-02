@@ -1,4 +1,49 @@
-.pto-dialog-fw {
+.calendar-dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 8px;
+}
+
+[mat-dialog-title] {
+  margin: 0;
+}
+
+.calendar-dialog-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 8px 0;
+}
+
+.calendar-dialog-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: #F7F6F2;
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.calendar-dialog-card.full-width {
+  grid-column: 1 / -1;
+}
+
+.calendar-dialog-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #A09890;
+}
+
+.calendar-dialog-value {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1C1917;
+}
+
+.calendar-dialog-fw {
   width: 100%;
 }
 
@@ -8,4 +53,12 @@ mat-dialog-content {
   min-width: clamp(280px, 80vw, 420px);
   /* gap: 1rem; */
   padding-top: 8px;
+}
+
+.calendar-cancel-btn {
+  color: #B00020 !important;
+}
+
+.calendar-delete-btn {
+  background-color: #B00020 !important;
 }

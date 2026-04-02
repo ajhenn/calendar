@@ -1,3 +1,141 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import "tailwindcss";
+
+:root {
+ 
+ --fc-border-color: #F0EBE4;
+ --fc-page-bg-color: #ffffff;
+ --fc-neutral-bg-color: #FAF8F5;
+ --fc-today-bg-color: #FFFBF5;
+
+ --fc-event-border-radius: 6px;
+ --fc-event-padding: 2px 6px;
+ --fc-small-font-size: 0.82em;
+}
+
+.fc .fc-toolbar {
+ padding: 16px 20px;
+ background: #ffffff;
+ border-bottom: 1px solid #F0EBE4;
+}
+
+.fc .fc-toolbar-title {
+ font-size: 1.2rem;
+ font-weight: 700;
+ color: #1C1917;
+ letter-spacing: -0.3px;
+}
+
+.fc .fc-button {
+ background: transparent;
+ border: 1.5px solid #E8E2DA;
+ color: #57534E;
+ border-radius: 8px;
+ font-weight: 600;
+ font-size: 0.82rem;
+ padding: 6px 14px;
+ text-transform: capitalize;
+ box-shadow: none;
+ transition: background 0.15s, color 0.15s;
+
+ &:hover {
+   background: #F5F1EC;
+   color: #1C1917;
+   border-color: #D6CFC6;
+ }
+
+ &:focus {
+   box-shadow: none;
+   outline: none;
+ }
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active,
+.fc .fc-button-primary:not(:disabled):active {
+ background: #1C1917;
+ border-color: #1C1917;
+ color: white;
+}
+
+.fc .fc-col-header-cell {
+ background: #FAFAF8;
+ padding: 10px 0;
+ border-color: #F0EBE4;
+}
+
+.fc .fc-col-header-cell-cushion {
+ font-size: 0.72rem;
+ font-weight: 700;
+ text-transform: uppercase;
+ letter-spacing: 0.08em;
+ color: #A09890;
+ text-decoration: none;
+}
+
+.fc .fc-daygrid-day {
+ transition: background 0.12s;
+
+ &:hover {
+   background: #FAFAF8;
+   cursor: pointer;
+ }
+}
+
+.fc .fc-daygrid-day-number {
+ font-size: 0.82rem;
+ font-weight: 500;
+ color: #1C1917;
+ text-decoration: none;
+ padding: 6px 8px;
+}
+
+.fc .fc-day-today .fc-daygrid-day-number {
+ background: #1C1917;
+ color: white;
+ border-radius: 50%;
+ width: 26px;
+ height: 26px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ padding: 0;
+ margin: 6px 6px 0 auto;
+}
+
+.fc-event {
+ border: none !important;
+ border-radius: 6px !important;
+ font-weight: 400 !important;
+ padding: 2px 7px !important;
+ cursor: pointer;
+ transition: opacity 0.15s;
+
+ &:hover {
+   opacity: 0.85;
+ }
+}
+
+.fc .fc-daygrid-event-dot {
+ border-radius: 50%;
+}
+
+.fc .fc-daygrid-more-link {
+ 
+ 
+ color: #A09890;
+
+ &:hover {
+   color: #1C1917;
+   background: transparent;
+ }
+}
+
+.fc-scroller::-webkit-scrollbar {
+ width: 4px;
+}
+
+.fc-scroller::-webkit-scrollbar-thumb {
+ background: #E8E2DA;
+ border-radius: 4px;
+}

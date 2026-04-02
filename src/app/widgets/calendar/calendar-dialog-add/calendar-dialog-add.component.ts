@@ -8,10 +8,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule, provideNativeDateAdapter } from '@angular/material/core';
 import { CALENDAR_REASONS, CALENDAR_TEAM } from '../../../models/calendar-event.model';
+import { parseLocalDate } from '../../../utils/calendar.util';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-calendar-dialog-add',
-  imports: [ReactiveFormsModule, MatDialogModule, MatFormFieldModule,
+  imports: [ReactiveFormsModule, MatDialogModule, MatFormFieldModule, MatIconModule,
     MatSelectModule, MatInputModule, MatDatepickerModule, MatNativeDateModule, MatButtonModule],
   providers: [provideNativeDateAdapter()],
   templateUrl: './calendar-dialog-add.component.html',
@@ -28,12 +30,13 @@ export class CalendarDialogAddComponent {
   addEventForm = new FormGroup({
     name: new FormControl<string>('', Validators.required),
     reason: new FormControl<string>('', Validators.required),
-    start: new FormControl<Date | null>(new Date(this.dialogData.start), Validators.required),
-    end: new FormControl<Date | null>(new Date(this.dialogData.end), Validators.required),
+    start: new FormControl<Date | null>(new Date(parseLocalDate(this.dialogData.start)), Validators.required),
+    end: new FormControl<Date | null>(new Date(parseLocalDate(this.dialogData.end)), Validators.required),
     comments: new FormControl<string>('')
   });
 
   addEvent() {
+    console.log('Add Event Form Value:', this.addEventForm);
     if (this.addEventForm.valid) {
       console.log('Event Request Submitted:', this.addEventForm.value);
       this.dialogRef.close(this.addEventForm.getRawValue());

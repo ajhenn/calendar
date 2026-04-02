@@ -1,4 +1,15 @@
-.pto-dialog-fw {
+.calendar-dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 8px;
+}
+
+[mat-dialog-title] {
+  margin: 0;
+}
+
+.calendar-dialog-fw {
   width: 100%;
 }
 
@@ -8,4 +19,8 @@ mat-dialog-content {
   min-width: clamp(280px, 80vw, 420px);
   /* gap: 1rem; */
   padding-top: 8px;
+}
+
+.calendar-cancel-btn {
+  color: #B00020 !important;
 }

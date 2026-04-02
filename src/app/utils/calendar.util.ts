@@ -16,3 +16,11 @@ export function colorForName(name: string) {
   }
   return PALETTE[Math.abs(hash) % PALETTE.length];
 }
+
+export function parseLocalDate(value: string | Date): Date {
+  if (value instanceof Date) {
+    return value;
+  }
+  const [year, month, day] = value.split('-').map(Number);
+  return new Date(year, month - 1, day); // month is 0-indexed in JavaScript Date
+}

@@ -6,10 +6,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import * as GroceryListActions from '../../store/grocery-list.actions';
+import * as CalendarActions from '../../store/calendar.actions';
 import { SignInService } from '../../services/sign-in.service';
 import { Router } from '@angular/router';
-
 
 @Component({
   selector: 'app-sign-in',
@@ -72,9 +71,8 @@ export class SignInComponent {
     }
   }
 
-  goToGroceryList() {
-    // this.store.dispatch(GroceryListActions.routerGoToGroceryList());
-    this.store.dispatch(GroceryListActions.routerGoToCalendar());
+  goToCalendar() {
+    this.store.dispatch(CalendarActions.routerGoToCalendar());
   }
 
   async handleSignIn(event: Event) {
@@ -87,7 +85,7 @@ export class SignInComponent {
       if (response.error) {
         this.signInError.set('Oh shit, it\'s broke can\'t log you in! Contact Andy for help. <br><br> Error:' + response.error);
       } else {
-        this.goToGroceryList();
+        this.goToCalendar();
       }
     } catch (error: any) {
       const errorMessage = error?.message || 'An unexpected error occurred';
@@ -108,7 +106,7 @@ export class SignInComponent {
       } else {
         console.log('Sign-up successful:', response.data);
         // Now login?
-        // this.goToGroceryList();
+        // this.goToCalendar();
       }
     } catch (error: any) {
       const errorMessage = error?.message || 'An unexpected error occurred';

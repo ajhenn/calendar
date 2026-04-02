@@ -9,14 +9,14 @@
     </button>
     <mat-menu #menu="matMenu">
       @if (showSignOut()) {
-        <button mat-menu-item>
+        <button mat-menu-item (click)="logout()">
           <mat-icon>logout</mat-icon>
           <span>Sign Out</span>
         </button>
       }
-      <button mat-menu-item>
-        <mat-icon>login</mat-icon>
-        <span>What else?</span>
+      <button mat-menu-item (click)="donateToDeveloper()">
+        <mat-icon>volunteer_activism</mat-icon>
+        <span>Donate</span>
       </button>
       <!-- <button mat-menu-item [matMenuTriggerFor]="helpprayers">
         <mat-icon>handshake</mat-icon>
@@ -42,7 +42,7 @@
       </div>
     </span>
     <span class="header-spacer"></span>
-    <button mat-icon-button aria-label="Share">
+    <button mat-icon-button aria-label="Share" (click)="shareSite()">
       <mat-icon>share</mat-icon>
     </button>
   </mat-toolbar>

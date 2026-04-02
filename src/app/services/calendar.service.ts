@@ -30,6 +30,7 @@ export class CalendarService {
       const { data, error } = await supabase
         .from('calendar_events')
         .select('*')
+        .eq('user_id', user.id)
         .order('start_date', { ascending: true });
 
       if (error) return { data: null, error: error.message };
@@ -52,7 +53,7 @@ export class CalendarService {
       console.log('Adding calendar entry:', entry);
       const { data, error } = await supabase
         .from('calendar_events')
-        .insert(entry)
+        .insert({ ...entry, user_id: user.id })
         .select()
         .single();
       if (error) return { data: null, error: error.message };
@@ -76,7 +77,8 @@ export class CalendarService {
       const { data, error } = await supabase
         .from('calendar_events')
         .update(updates)
-        .eq('id', id)
+        .in('id', [id])
+        .eq('user_id', user.id)
         .select()
         .single();
       if (error) return { data: null, error: error.message };
@@ -98,7 +100,8 @@ export class CalendarService {
       const { error } = await supabase
         .from('calendar_events')
         .delete()
-        .eq('id', id);
+        .in('id', [id])
+        .eq('user_id', user.id);
       if (error) return { data: null, error: error.message };
       this._entries.update(entries => entries.filter(e => e.id !== id));
       return { data: null, error: null };
@@ -108,71 +111,5 @@ export class CalendarService {
       this.loaderService.hide();
     }
   }
-// TODO
-//   async addGroceryItem(item: string, quantity: number): Promise<ServiceResponse<any>> {
-//     this.loaderService.show();
-//     try {
-//       const userResult = await supabase.auth.getUser();
-//       const user = userResult?.data?.user;
-//       if (!user) return { data: null, error: 'Not authenticated' };
-
-//       const { data, error } = await supabase
-//         .from('grocery_lists')
-//         .insert({ user_id: user.id, item, quantity })
-//         .select()
-//         .single();
-
-//       if (error) return { data: null, error: error.message };
-//       return { data: data || null, error: null };
-//     } catch (err: any) {
-//       return { data: null, error: err?.message || 'Unexpected error adding item' };
-//     } finally {
-//       this.loaderService.hide();
-//     }
-//   }
-
-//   async getGroceryList(): Promise<ServiceResponse<any[]>> {
-//     this.loaderService.show();
-//     try {
-//       const userResult = await supabase.auth.getUser();
-//       const user = userResult?.data?.user;
-//       if (!user) return { data: [], error: 'Not authenticated' };
-
-//       const { data, error } = await supabase
-//         .from('grocery_lists')
-//         .select('*')
-//         .eq('user_id', user.id)
-//         .order('created_at', { ascending: false });
-
-//       if (error) return { data: [], error: error.message };
-//       return { data: data || [], error: null };
-//     } catch (err: any) {
-//       return { data: [], error: err?.message || 'Unexpected error fetching list' };
-//     } finally {
-//       this.loaderService.hide();
-//     }
-//   }
-
-//   async deleteUserItems(items: string[]) {
-//     this.loaderService.show();
-//     try {
-//       const userResult = await supabase.auth.getUser();
-//       const user = userResult?.data?.user;
-//       if (!user) return { data: [], error: 'Not authenticated' };
-
-//       const { data, error } = await supabase
-//         .from('grocery_lists')
-//         .delete()
-//         .in('id', items)
-//         .eq('user_id', user.id);
-
-//       if (error) return { data: [], error: error.message };
-//       return { data: data || [], error: null };
-//     } catch (err: any) {
-//       return { data: [], error: err?.message || 'Unexpected error deleting items' };
-//     } finally {
-//       this.loaderService.hide();
-//     }
-// }
 
 }
