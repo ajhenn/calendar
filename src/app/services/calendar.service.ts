@@ -2,6 +2,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { supabase } from '../supabase.client';
 import { LoaderService } from './loader.service';
 import { CalendarEvent } from '../models/calendar-event.model';
+import { DemoService } from './demo.service';
 
 /**
  * Generic service response wrapper
@@ -17,10 +18,20 @@ export interface ServiceResponse<T> {
 export class CalendarService {
 
   private loaderService = inject(LoaderService);
+  private demoService = inject(DemoService);
   private _entries = signal<CalendarEvent[]>([]);
+  private _isDemoMode = signal<boolean>(false);
   entries = this._entries.asReadonly();
+  isDemoMode = this._isDemoMode.asReadonly();
 
   async fetchEntries(): Promise<ServiceResponse<any>> {
+    if (this._isDemoMode()) {
+      // Return demo data
+      const demoData = this.demoService.getDemoEntries();
+      this._entries.set(demoData);
+      return { data: demoData, error: null };
+    }
+
     this.loaderService.show();
     try {
       const userResult = await supabase.auth.getUser();
@@ -42,6 +53,14 @@ export class CalendarService {
     } finally {
       this.loaderService.hide();
     }
+  }
+
+  enableDemoMode(): void {
+    this._isDemoMode.set(true);
+  }
+
+  disableDemoMode(): void {
+    this._isDemoMode.set(false);
   }
 
   async addEntry(entry: Omit<CalendarEvent, 'id' | 'created'>): Promise<ServiceResponse<CalendarEvent>> {

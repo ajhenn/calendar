@@ -13,7 +13,16 @@ export class CalendarEffects {
     () =>
       this.actions$.pipe(
         ofType(CalendarActions.routerGoToCalendar),
-        tap(() => this.router.navigate(['/calendar']))
+        tap(() => this.router.navigate(['/calendar'], { queryParamsHandling: 'merge' }))
+      ),
+    { dispatch: false }
+  );
+
+  routerGoToDashboard$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(CalendarActions.routerGoToDashboard),
+        tap(() => this.router.navigate(['/dashboard'], { queryParamsHandling: 'merge' }))
       ),
     { dispatch: false }
   );

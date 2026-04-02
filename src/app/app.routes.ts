@@ -10,5 +10,9 @@ export const routes: Routes = [
     path: 'calendar',
     loadComponent: () => import('./widgets/calendar/calendar.component').then(m => m.CalendarComponent)
   },
+  {
+    path: 'dashboard',
+    loadComponent: () => import('./widgets/dashboard/dashboard.component').then(m => m.DashboardComponent)
+  },
   { path: '**', redirectTo: '/sign-in' }
 ];

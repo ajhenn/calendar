@@ -11,12 +11,13 @@ import listPlugin from '@fullcalendar/list';
 import { v4 as uuid4 } from 'uuid';
 import { CalendarDialogAddComponent } from './calendar-dialog-add/calendar-dialog-add.component';
 import { filter } from 'rxjs';
-import { colorForName } from '../../utils/calendar.util';
+import { colorForName, parseLocalDate } from '../../utils/calendar.util';
 import { CalendarService } from '../../services/calendar.service';
 import { CalendarDialogEditComponent, CalendarDialogResult } from './calendar-dialog-edit/calendar-dialog-edit.component';
 import { CALENDAR_REASONS, CALENDAR_TEAM } from '../../models/calendar-event.model';
 import { AuthService } from '../../services/auth-state.service';
 import { Store } from '@ngrx/store';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-calendar',
@@ -31,6 +32,7 @@ export class CalendarComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
   private store = inject(Store);
   private authService = inject(AuthService);
+  private route = inject(ActivatedRoute);
 
   calendarVisible = signal(false);
   calendarOptions = signal<CalendarOptions>({
@@ -43,7 +45,13 @@ export class CalendarComponent implements OnInit {
     headerToolbar: {
       left: 'prev,next today',
       center: 'title',
-      right: 'dayGridMonth,listWeek'
+      right: 'dayGridMonth,listWeek,dashboard'
+    },
+    customButtons: {
+      dashboard: {
+        text: 'Dashboard',
+        click: () => this.store.dispatch(CalendarActions.routerGoToDashboard())
+      }
     },
     initialView: 'dayGridMonth',
     events: [],
@@ -66,6 +74,14 @@ export class CalendarComponent implements OnInit {
   });
 
   async ngOnInit(): Promise<void> {
+    const isDemo = this.route.snapshot.queryParams['demo'] === 'true';
+    if (isDemo) {
+      this.calendarService.enableDemoMode();
+      await this.calendarService.fetchEntries();
+      this.calendarVisible.set(true);
+      return;
+    }
+
     const user = this.authService.getAuthState();
     if (user.isLoggedIn) {
       await this.calendarService.fetchEntries();
@@ -73,6 +89,13 @@ export class CalendarComponent implements OnInit {
     } else {
       this.store.dispatch(CalendarActions.routerGoToSignIn({ isTimedOut: true }));
     }
+  }
+
+  private toFullCalendarEnd(date: string | Date): string {
+    // stored end is inclusive; FullCalendar expects exclusive end for all-day events.
+    const d = parseLocalDate(date);
+    d.setDate(d.getDate() + 1);
+    return d.toISOString().split('T')[0];
   }
 
   private readonly syncCalendarEventsEffect = effect(() => {
@@ -84,7 +107,7 @@ export class CalendarComponent implements OnInit {
       id: entry.id,
       title: `${entry.name} - ${entry.reason}`,
       start: entry.start_date,
-      end: entry.end_date,
+      end: this.toFullCalendarEnd(entry.end_date),
       allDay: true,
       backgroundColor: colorForName(entry.name),
       borderColor: colorForName(entry.name),
@@ -101,10 +124,18 @@ export class CalendarComponent implements OnInit {
     const calendarApi = selectInfo.view.calendar;
     calendarApi.unselect(); // clear date selection
 
+    // FullCalendar gives end as exclusive for date range selection.
+    // Convert to inclusive end date so users see the expected day in UI.
+    const inclusiveEndDate = selectInfo.end ? new Date(selectInfo.end) : new Date(selectInfo.start);
+    if (selectInfo.end) {
+      inclusiveEndDate.setDate(inclusiveEndDate.getDate() - 1);
+    }
+    const inclusiveEndStr = inclusiveEndDate.toISOString().split('T')[0];
+
     this.dialog.open(CalendarDialogAddComponent, {
       data: {
-        start: selectInfo.startStr, 
-        end: selectInfo.endStr,
+        start: selectInfo.startStr,
+        end: inclusiveEndStr,
         team: CALENDAR_TEAM,
         reasons: CALENDAR_REASONS
       }
@@ -125,7 +156,17 @@ export class CalendarComponent implements OnInit {
       });
 
       if (saved) {
-        // events are rendered reactively from calendarService.entries()
+        const endDate = saved?.data?.end_date ?? (end as Date).toISOString().split('T')[0];
+        calendarApi.addEvent({
+          id: saved?.data?.id ?? uuid4(),
+          title: `${saved?.data?.name || name} - ${saved?.data?.reason || reason}`,
+          start: saved?.data?.start_date ?? start,
+          end: this.toFullCalendarEnd(endDate),
+          allDay: true,
+          backgroundColor: colorForName(saved.data?.name ?? name),
+          borderColor: colorForName(saved.data?.name ?? name),
+          extendedProps: { comments: saved?.data?.comments ?? (comments || '') }
+        });
       }
     });
   }

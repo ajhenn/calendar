@@ -36,12 +36,45 @@
 
     <span class="header-txt cursor-pointer flex items-center">
       <!-- <mat-icon class="header-logo" aria-hidden="false" aria-label="Grub logo">todo</mat-icon> -->
-      <div class="header-title">
+      <div class="header-title bg-gradient-to-r from-purple-600 to-blue-600 text-transparent bg-clip-text">
         <div class="title-main">Team Calendar</div>
-        <!-- <div class="title-sub">Create • Snap • Share</div> -->
+        @if (isDemoMode()) {
+          <div class="title-sub text-orange-400 font-semibold">Demo Mode</div>
+        }
       </div>
+      @if (showTryDemo()) {
+        <button mat-stroked-button color="accent" (click)="tryDemo()" class="ml-4">
+          Try Demo
+        </button>
+      }
     </span>
     <span class="header-spacer"></span>
+
+<!-- Navigation Buttons (only if authenticated or demo mode) -->
+    @if (showSignOut() || isDemoMode()) {
+      <button 
+        mat-icon-button 
+        routerLink="/calendar" 
+        [queryParamsHandling]="'merge'"
+        [disabled]="isCalendarActive()"
+        matTooltip="Calendar"
+        class="nav-button"
+      >
+        <mat-icon>calendar_today</mat-icon>
+      </button>
+
+      <button 
+        mat-icon-button 
+        routerLink="/dashboard" 
+        [queryParamsHandling]="'merge'"
+        [disabled]="isDashboardActive()"
+        matTooltip="Analytics"
+        class="nav-button"
+      >
+        <mat-icon>analytics</mat-icon>
+      </button>
+    }
+
     <button mat-icon-button aria-label="Share" (click)="shareSite()">
       <mat-icon>share</mat-icon>
     </button>

@@ -16,6 +16,10 @@ export const routerGoToCalendar = createAction(
   '[Router] Go To Calendar'
 );
 
+export const routerGoToDashboard = createAction(
+  '[Router] Go To Dashboard'
+);
+
 export const routerGoToSignIn = createAction(
   '[Router] Go To Sign In',
   props<{ isTimedOut?: boolean }>()
