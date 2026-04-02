@@ -1,0 +1,68 @@
+@let viewMode = mode();
+<h2 mat-dialog-title>
+  @if (viewMode === 'view') {
+    {{ dialogData.event.name }} - {{ dialogData.event.reason }}
+  } @else {
+    Edit Event
+  }
+</h2>
+<mat-dialog-content>
+  @if (viewMode === 'view') {
+    <p><strong>Team Member:</strong> {{ dialogData.event.name }}</p>
+    <p><strong>Reason:</strong> {{ dialogData.event.reason }}</p>
+    <p><strong>Start Date:</strong> {{ dialogData.event.start_date | date }}</p>
+    <p><strong>End Date:</strong> {{ dialogData.event.end_date | date }}</p>
+    @if (dialogData.event.comments) {
+      <p><strong>Comments:</strong> {{ dialogData.event.comments }}</p>
+    }
+  } @else {
+    <form [formGroup]="editEventForm" (ngSubmit)="save()">
+      <mat-form-field appearance="outline" class="pto-dialog-fw">
+        <mat-label>Team Member</mat-label>
+         <mat-select formControlName="name" required>
+          @for (member of dialogData.team; track member) {
+              <mat-option [value]="member">{{ member }}</mat-option>
+          }
+          </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="pto-dialog-fw">
+        <mat-label>Reason</mat-label>
+         <mat-select formControlName="reason" required>
+          @for (reason of dialogData.reasons; track reason) {
+              <mat-option [value]="reason">{{ reason }}</mat-option>
+          }
+          </mat-select>
+      </mat-form-field>
+      
+      <mat-form-field appearance="fill" class="pto-dialog-fw">
+        <mat-label>Start Date</mat-label>
+        <input matInput [matDatepicker]="startPicker" formControlName="start_date" required>
+        <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+        <mat-datepicker #startPicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="pto-dialog-fw">
+        <mat-label>End Date</mat-label>
+        <input matInput [matDatepicker]="endPicker" formControlName="end_date" required>
+        <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+        <mat-datepicker #endPicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="pto-dialog-fw">
+        <mat-label>Comments</mat-label>
+        <input matInput formControlName="comments">
+      </mat-form-field>
+    </form>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  @if (viewMode === 'view') {
+    <button mat-button type="button" (click)="closeDialog()">Close</button>
+    <button mat-raised-button color="primary" type="button" (click)="mode.set('edit')">Edit</button>
+    <button mat-raised-button color="warn" type="button" (click)="delete()">Delete</button>
+  } @else {
+    <button mat-button type="button" (click)="closeDialog()">Cancel</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="editEventForm.invalid" (click)="save()">Save</button>
+  }

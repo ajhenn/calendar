@@ -1,0 +1,49 @@
+<div class="col-12 header-toolbar d-flex">
+  <mat-toolbar color="primary">
+    <button
+      mat-icon-button
+      [matMenuTriggerFor]="menu"
+      aria-label="Menu"
+    >
+      <mat-icon>menu</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      @if (showSignOut()) {
+        <button mat-menu-item>
+          <mat-icon>logout</mat-icon>
+          <span>Sign Out</span>
+        </button>
+      }
+      <button mat-menu-item>
+        <mat-icon>login</mat-icon>
+        <span>What else?</span>
+      </button>
+      <!-- <button mat-menu-item [matMenuTriggerFor]="helpprayers">
+        <mat-icon>handshake</mat-icon>
+        <span>Helpful Prayers</span>
+      </button> -->
+    </mat-menu>
+    <!-- <mat-menu #helpprayers="matMenu">
+      <button mat-menu-item>Serenity Prayer</button>
+      <button mat-menu-item>The Lords Prayer</button>
+      <button mat-menu-item>St Francis Prayer</button>
+      <button mat-menu-item>Morning Prayer</button>
+      <button mat-menu-item>Night Prayer</button>
+      <button mat-menu-item>
+        Great Spirit Prayer
+      </button>
+    </mat-menu> -->
+
+    <span class="header-txt cursor-pointer flex items-center">
+      <!-- <mat-icon class="header-logo" aria-hidden="false" aria-label="Grub logo">todo</mat-icon> -->
+      <div class="header-title">
+        <div class="title-main">Team Calendar</div>
+        <!-- <div class="title-sub">Create • Snap • Share</div> -->
+      </div>
+    </span>
+    <span class="header-spacer"></span>
+    <button mat-icon-button aria-label="Share">
+      <mat-icon>share</mat-icon>
+    </button>
+  </mat-toolbar>
+</div>

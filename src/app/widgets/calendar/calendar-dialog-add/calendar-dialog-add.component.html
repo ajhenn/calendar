@@ -1,0 +1,46 @@
+<h2 mat-dialog-title>Add Event</h2>
+<mat-dialog-content>
+  <form [formGroup]="addEventForm" (ngSubmit)="addEvent()">
+    <mat-form-field appearance="outline" class="pto-dialog-fw">
+      <mat-label>Team Member</mat-label>
+       <mat-select formControlName="name" required>
+        @for (member of dialogData.team; track member) {
+            <mat-option [value]="member">{{ member }}</mat-option>
+        }
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="pto-dialog-fw">
+      <mat-label>Reason</mat-label>
+       <mat-select formControlName="reason" required>
+        @for (reason of dialogData.reasons; track reason) {
+            <mat-option [value]="reason">{{ reason }}</mat-option>
+        }
+        </mat-select>
+    </mat-form-field>
+    
+    <mat-form-field appearance="fill" class="pto-dialog-fw">
+      <mat-label>Start Date</mat-label>
+      <input matInput [matDatepicker]="startPicker" formControlName="start" required>
+      <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+      <mat-datepicker #startPicker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="pto-dialog-fw">
+      <mat-label>End Date</mat-label>
+      <input matInput [matDatepicker]="endPicker" formControlName="end" required>
+      <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+      <mat-datepicker #endPicker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="pto-dialog-fw">
+      <mat-label>Comments</mat-label>
+      <input matInput formControlName="comments">
+    </mat-form-field>
+
+    <div mat-dialog-actions align="end">
+      <button mat-button type="button" (click)="closeDialog()">Cancel</button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="addEventForm.invalid">Add</button>
+    </div>
+  </form>
+</mat-dialog-content>

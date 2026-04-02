@@ -1,0 +1,11 @@
+.pto-dialog-fw {
+  width: 100%;
+}
+
+mat-dialog-content {
+  display: flex;
+  flex-direction: column;
+  min-width: clamp(280px, 80vw, 420px);
+  /* gap: 1rem; */
+  padding-top: 8px;
+}
