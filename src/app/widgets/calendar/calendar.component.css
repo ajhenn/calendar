@@ -1,3 +1,131 @@
 .calendar-container {
     padding: 1.5rem;
 }
+
+.calendar-mobile-banner {
+    background: #e0f7fa;
+    color: #006064;
+    border: 1px solid #4dd0e1;
+    border-radius: 0.35rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 0.65rem 0.85rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    line-height: 1.4;
+    min-height: 2.4rem;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.fc .fc-toolbar-chunk {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.fc .fc-toolbar-title {
+    white-space: normal;
+    font-size: 1rem;
+    flex: 1 1 auto;
+    text-align: center;
+}
+
+.fc .fc-button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.15rem;
+}
+
+.fc .fc-button {
+    min-width: 2.5rem;
+}
+
+@media (max-width: 767px) {
+    .calendar-container {
+        padding: 0.75rem;
+    }
+    .calendar-mobile-banner {
+        margin-bottom: 0.8rem;
+        font-size: 0.9rem;
+        line-height: 1.5;
+        padding: 0.7rem 0.85rem;
+        min-height: 2.8rem;
+    }
+    .fc .fc-toolbar {
+        display: block;
+        padding: 0.2rem 0.2rem 0.5rem;
+        background: #fff;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+    }
+    .fc .fc-toolbar-chunk {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 0.25rem;
+        width: 100%;
+    }
+    .fc .fc-toolbar .fc-toolbar-chunk:nth-child(1) {
+        margin-bottom: 0.25rem;
+    }
+    .fc .fc-toolbar-title {
+        font-size: 0.85rem;
+        width: 100%;
+        text-align: center;
+        font-weight: 600;
+        margin: 0.2rem 0;
+    }
+    .fc .fc button {
+        min-width: 1.8rem;
+        padding: 0.25rem 0.4rem;
+        font-size: 0.8rem;
+        border-radius: 0.35rem;
+    }
+    .fc .fc-button-group {
+        width: 100%;
+        justify-content: space-evenly;
+    }
+    .fc .fc-button {
+        width: auto;
+        flex: 1 1 auto;
+        max-width: 5rem;
+    }
+    .fc .fc-button:hover,
+    .fc .fc-button:focus {
+        transform: scale(1.03);
+    }
+    .fc .fc-daygrid-weekday, .fc .fc-daygrid-day-top {
+        font-size: 0.8rem;
+    }
+    .fc .fc-daygrid-day {
+        min-height: 9rem;
+    }
+    .fc .fc-daygrid-event {
+        font-size: 0.75rem;
+        line-height: 1.2;
+        padding: 0.1rem 0.2rem;
+    }
+    .fc .fc-daygrid-day-number {
+        font-size: 0.9rem;
+        padding-top: 0.1rem;
+    }
+}    .fc .fc-daygrid-weekday, .fc .fc-daygrid-day-top {
+        font-size: 0.78rem;
+    }
+    .fc .fc-daygrid-day {
+        min-height: 7.6rem;
+    }
+    .fc .fc-daygrid-day-top {
+        min-height: 1.35rem;
+    }
+    .fc .fc-daygrid-event {
+        font-size: 0.7rem;
+        line-height: 1.2;
+    }
+    .fc .fc-daygrid-day-number {
+        font-size: 0.82rem;
+    }

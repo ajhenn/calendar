@@ -18,24 +18,13 @@
         <mat-icon>volunteer_activism</mat-icon>
         <span>Donate</span>
       </button>
-      <!-- <button mat-menu-item [matMenuTriggerFor]="helpprayers">
-        <mat-icon>handshake</mat-icon>
-        <span>Helpful Prayers</span>
-      </button> -->
-    </mat-menu>
-    <!-- <mat-menu #helpprayers="matMenu">
-      <button mat-menu-item>Serenity Prayer</button>
-      <button mat-menu-item>The Lords Prayer</button>
-      <button mat-menu-item>St Francis Prayer</button>
-      <button mat-menu-item>Morning Prayer</button>
-      <button mat-menu-item>Night Prayer</button>
-      <button mat-menu-item>
-        Great Spirit Prayer
+      <button mat-menu-item (click)="shareSite()">
+        <mat-icon>share</mat-icon>
+        <span>Share</span>
       </button>
-    </mat-menu> -->
+    </mat-menu>
 
     <span class="header-txt cursor-pointer flex items-center">
-      <!-- <mat-icon class="header-logo" aria-hidden="false" aria-label="Grub logo">todo</mat-icon> -->
       <div class="header-title bg-gradient-to-r from-purple-600 to-blue-600 text-transparent bg-clip-text">
         <div class="title-main">Team Calendar</div>
         @if (isDemoMode()) {
@@ -69,14 +58,10 @@
         [queryParamsHandling]="'merge'"
         [disabled]="isDashboardActive()"
         matTooltip="Analytics"
-        class="nav-button"
+        class="nav-button nav-button-mobile"
       >
         <mat-icon>analytics</mat-icon>
       </button>
     }
-
-    <button mat-icon-button aria-label="Share" (click)="shareSite()">
-      <mat-icon>share</mat-icon>
-    </button>
   </mat-toolbar>
 </div>

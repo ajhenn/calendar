@@ -1,4 +1,5 @@
 import { Component, DestroyRef, effect, inject, OnInit, signal } from '@angular/core';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { FullCalendarComponent, FullCalendarModule } from '@fullcalendar/angular';
@@ -33,8 +34,10 @@ export class CalendarComponent implements OnInit {
   private store = inject(Store);
   private authService = inject(AuthService);
   private route = inject(ActivatedRoute);
+  private breakpointObserver = inject(BreakpointObserver);
 
   calendarVisible = signal(false);
+  isMobile = signal(false);
   calendarOptions = signal<CalendarOptions>({
     plugins: [
       interactionPlugin,
@@ -45,7 +48,19 @@ export class CalendarComponent implements OnInit {
     headerToolbar: {
       left: 'prev,next today',
       center: 'title',
-      right: 'dayGridMonth,listWeek,dashboard'
+      right: ''
+    },
+    footerToolbar: {
+      left: '',
+      center: 'dayGridMonth,listWeek,dashboard',
+      right: ''
+    },
+    buttonText: {
+      today: 'Today',
+      month: 'Month',
+      list: 'List',
+      prev: '<',
+      next: '>'
     },
     customButtons: {
       dashboard: {
@@ -74,6 +89,8 @@ export class CalendarComponent implements OnInit {
   });
 
   async ngOnInit(): Promise<void> {
+    this.observeScreenSize();
+
     const isDemo = this.route.snapshot.queryParams['demo'] === 'true';
     if (isDemo) {
       this.calendarService.enableDemoMode();
@@ -89,6 +106,57 @@ export class CalendarComponent implements OnInit {
     } else {
       this.store.dispatch(CalendarActions.routerGoToSignIn({ isTimedOut: true }));
     }
+  }
+
+  private observeScreenSize(): void {
+    this.breakpointObserver.observe([Breakpoints.Handset, '(max-width: 767px)'])
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(result => {
+        const mobile = result.matches;
+        this.isMobile.set(mobile);
+
+        this.calendarOptions.update(options => ({
+          ...options,
+          initialView: mobile ? 'listWeek' : 'dayGridMonth',
+          headerToolbar: {
+            left: 'prev,today,next',
+            center: 'title',
+            right: mobile ? '' : 'dayGridMonth,listWeek,dashboard'
+          },
+          footerToolbar: mobile ? {
+            left: '',
+            center: 'dayGridMonth,listWeek,dashboard',
+            right: ''
+          } : {
+            left: '',
+            center: '',
+            right: ''
+          },
+          buttonText: {
+            today: 'Today',
+            month: 'Month',
+            list: 'List',
+            dashboard: 'Dashboard',
+            prev: '<',
+            next: '>'
+          },
+          navLinks: true,
+          aspectRatio: mobile ? 0.65 : 1.35,
+          contentHeight: mobile ? 'auto' : undefined,
+          dayMaxEvents: mobile ? 2 : true,
+          eventDisplay: 'block',
+          views: {
+            dayGridMonth: {
+              dayMaxEvents: mobile ? 1 : true,
+              fixedWeekCount: false,
+              titleFormat: { year: 'numeric', month: 'short' }
+            },
+            listWeek: {
+              buttonText: mobile ? 'L' : 'List'
+            }
+          }
+        }));
+      });
   }
 
   private toFullCalendarEnd(date: string | Date): string {

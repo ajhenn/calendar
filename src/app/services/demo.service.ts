@@ -17,7 +17,7 @@ export class DemoService {
     },
     {
       id: 'demo-2',
-      name: 'Jessica',
+      name: 'Kate',
       reason: 'Called In',
       start_date: '2026-04-03',
       end_date: '2026-04-03',
@@ -26,7 +26,7 @@ export class DemoService {
     },
     {
       id: 'demo-3',
-      name: 'Henry',
+      name: 'Will',
       reason: 'Leaving Early',
       start_date: '2026-04-05',
       end_date: '2026-04-05',
@@ -53,8 +53,8 @@ export class DemoService {
     },
     {
       id: 'demo-6',
-      name: 'Jessica',
-      reason: 'Billing',
+      name: 'Kate',
+      reason: 'Arriving Late',
       start_date: '2026-04-15',
       end_date: '2026-04-15',
       comments: 'Client meeting',
@@ -62,7 +62,7 @@ export class DemoService {
     },
     {
       id: 'demo-7',
-      name: 'Henry',
+      name: 'Will',
       reason: 'Called In',
       start_date: '2026-04-18',
       end_date: '2026-04-18',
@@ -89,7 +89,7 @@ export class DemoService {
     },
     {
       id: 'demo-10',
-      name: 'Jessica',
+      name: 'Kate',
       reason: 'Arriving Late',
       start_date: '2026-04-30',
       end_date: '2026-04-30',
