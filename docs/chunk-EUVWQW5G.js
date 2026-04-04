@@ -1,1 +1,0 @@
-import{Ia as i,V as e,rc as n}from"./chunk-GJPPMU4V.js";var d=(()=>{class t{static \u0275fac=function(o){return new(o||t)};static \u0275mod=i({type:t});static \u0275inj=e({imports:[n]})}return t})();export{d as a};

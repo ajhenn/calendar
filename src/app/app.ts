@@ -10,5 +10,5 @@ import { LoaderComponent } from './shared/loader/loader.component';
   styleUrl: './app.css'
 })
 export class App {
-  protected readonly title = signal('list-app');
+  protected readonly title = signal('calendar-app');
 }
