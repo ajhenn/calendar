@@ -7,7 +7,6 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule, provideNativeDateAdapter } from '@angular/material/core';
-import { CALENDAR_REASONS, CALENDAR_TEAM } from '../../../models/calendar-event.model';
 import { parseLocalDate } from '../../../utils/calendar.util';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -23,9 +22,6 @@ export class CalendarDialogAddComponent {
 
   private dialogRef = inject<MatDialogRef<CalendarDialogAddComponent>>(MatDialogRef);
   public dialogData = inject<{start: string; end: string, team: string[], reasons: string[]}>(MAT_DIALOG_DATA);
-
-  readonly team = CALENDAR_TEAM
-  readonly reasons = CALENDAR_REASONS
 
   addEventForm = new FormGroup({
     name: new FormControl<string>('', Validators.required),

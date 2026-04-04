@@ -1,4 +1,4 @@
-import { Component, DestroyRef, effect, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, effect, inject, OnInit, signal } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
@@ -15,7 +15,7 @@ import { filter } from 'rxjs';
 import { colorForName, parseLocalDate } from '../../utils/calendar.util';
 import { CalendarService } from '../../services/calendar.service';
 import { CalendarDialogEditComponent, CalendarDialogResult } from './calendar-dialog-edit/calendar-dialog-edit.component';
-import { CALENDAR_REASONS, CALENDAR_TEAM } from '../../models/calendar-event.model';
+import { CALENDAR_REASONS, CALENDAR_TEAM, DEMO_TEAM } from '../../models/calendar-event.model';
 import { AuthService } from '../../services/auth-state.service';
 import { Store } from '@ngrx/store';
 import { ActivatedRoute } from '@angular/router';
@@ -38,6 +38,9 @@ export class CalendarComponent implements OnInit {
 
   calendarVisible = signal(false);
   isMobile = signal(false);
+  isDemoMode = computed(() => this.calendarService.isDemoMode());
+  teamOptions = computed(() => this.isDemoMode() ? DEMO_TEAM : CALENDAR_TEAM);
+
   calendarOptions = signal<CalendarOptions>({
     plugins: [
       interactionPlugin,
@@ -117,7 +120,7 @@ export class CalendarComponent implements OnInit {
 
         this.calendarOptions.update(options => ({
           ...options,
-          initialView: mobile ? 'listWeek' : 'dayGridMonth',
+          initialView: 'dayGridMonth',
           headerToolbar: {
             left: 'prev,today,next',
             center: 'title',
@@ -150,9 +153,6 @@ export class CalendarComponent implements OnInit {
               dayMaxEvents: mobile ? 1 : true,
               fixedWeekCount: false,
               titleFormat: { year: 'numeric', month: 'short' }
-            },
-            listWeek: {
-              buttonText: mobile ? 'L' : 'List'
             }
           }
         }));
@@ -204,7 +204,7 @@ export class CalendarComponent implements OnInit {
       data: {
         start: selectInfo.startStr,
         end: inclusiveEndStr,
-        team: CALENDAR_TEAM,
+        team: this.teamOptions(),
         reasons: CALENDAR_REASONS
       }
     })
@@ -250,7 +250,7 @@ export class CalendarComponent implements OnInit {
     this.dialog.open(CalendarDialogEditComponent, {
       data: {
         event: entry,
-        team: CALENDAR_TEAM,
+        team: this.teamOptions(),
         reasons: CALENDAR_REASONS
       }
     })
@@ -267,22 +267,4 @@ export class CalendarComponent implements OnInit {
       }
     });
   }
-
-  // handleWeekendsToggle() {
-  //   this.calendarOptions.update((options) => ({
-  //     ...options,
-  //     weekends: !options.weekends,
-  //       end: selectInfo.endStr,
-  //       allDay: selectInfo.allDay
-  //     });
-  //   }
-  
-
-  // handleWeekendsToggle() {
-  //   this.calendarOptions.update((options) => ({
-  //     ...options,
-  //     weekends: !options.weekends,
-  //   }));
-  // }
-
 }

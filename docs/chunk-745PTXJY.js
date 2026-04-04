@@ -1,1 +1,0 @@
-import{Ia as i,V as e,qc as n}from"./chunk-77ZVEXZ4.js";var d=(()=>{class t{static \u0275fac=function(o){return new(o||t)};static \u0275mod=i({type:t});static \u0275inj=e({imports:[n]})}return t})();export{d as a};

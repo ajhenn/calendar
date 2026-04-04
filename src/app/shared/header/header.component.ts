@@ -47,11 +47,6 @@ export class HeaderComponent {
 
   isDemoMode = computed(() => this.calendarService.isDemoMode());
 
-  showTryDemo = computed(() => {
-    const url = this.currentRoute();
-    return url.includes('demo=true') && !this.isDemoMode();
-  });
-
   isCalendarActive = computed(() => this.currentRoute().includes('/calendar'));
   isDashboardActive = computed(() => this.currentRoute().includes('/dashboard'));
 
@@ -59,21 +54,6 @@ export class HeaderComponent {
   logout() {
     this.authService.logout();
     this.store.dispatch(CalendarActions.routerGoToSignIn({isTimedOut: false}));
-  }
-
-  toggleDemoMode() {
-    if (this.isDemoMode()) {
-      this.calendarService.disableDemoMode();
-      this.store.dispatch(CalendarActions.routerGoToSignIn({isTimedOut: false}));
-    } else {
-      this.calendarService.enableDemoMode();
-      this.store.dispatch(CalendarActions.routerGoToCalendar());
-    }
-  }
-
-  tryDemo() {
-    this.calendarService.enableDemoMode();
-    this.router.navigate(['/calendar'], { queryParams: { demo: 'true' }, queryParamsHandling: 'merge' });
   }
 
   donateToDeveloper() {

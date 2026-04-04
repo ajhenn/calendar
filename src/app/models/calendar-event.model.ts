@@ -22,3 +22,10 @@ export const CALENDAR_REASONS = [
     'Arriving Late',
     'Billing'
   ];
+
+export const DEMO_TEAM = [
+  'John',
+  'Kate',
+  'Will',
+  'Emily'
+];

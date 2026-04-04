@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { App } from './app/app';
@@ -9,9 +9,14 @@ import { CalendarEffects } from './app/store/calendar.effects';
 
 bootstrapApplication(App, {
   providers: [
-    provideRouter(routes),
+    provideRouter(routes,
+      withInMemoryScrolling({
+        scrollPositionRestoration: 'top',
+        anchorScrolling: 'enabled'
+      })
+    ),
     provideStore({ calendar: listReducer }),
     provideEffects([CalendarEffects])
   ]
 })
-  .catch((err) => console.error(err));
+  .catch((err) => console.error('bootstrapApplication error: ', err));

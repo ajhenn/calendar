@@ -59,11 +59,13 @@ export class CalendarService {
     this._isDemoMode.set(true);
   }
 
-  disableDemoMode(): void {
-    this._isDemoMode.set(false);
-  }
-
   async addEntry(entry: Omit<CalendarEvent, 'id' | 'created'>): Promise<ServiceResponse<CalendarEvent>> {
+    if (this._isDemoMode()) {
+      const newEntry = this.demoService.addDemoEntry(entry);
+      this._entries.update(entries => [...entries, newEntry]);
+      return { data: newEntry, error: null };
+    }
+
     this.loaderService.show();
     try {
       const userResult = await supabase.auth.getUser();
@@ -87,6 +89,15 @@ export class CalendarService {
   }
 
   async updateEntry(id: string, updates: Partial<Omit<CalendarEvent, 'id' | 'created'>>): Promise<ServiceResponse<CalendarEvent>> {
+    if (this._isDemoMode()) {
+      const updatedEntry = this.demoService.updateDemoEntry(id, updates);
+      if (updatedEntry) {
+        this._entries.update(entries => entries.map(e => e.id === id ? updatedEntry : e));
+        return { data: updatedEntry, error: null };
+      }
+      return { data: null, error: 'Entry not found' };
+    }
+
     this.loaderService.show();
     try {
       const userResult = await supabase.auth.getUser();
@@ -111,6 +122,15 @@ export class CalendarService {
   }
 
   async deleteEntry(id: string): Promise<ServiceResponse<any>> {
+    if (this._isDemoMode()) {
+      const deleted = this.demoService.deleteDemoEntry(id);
+      if (deleted) {
+        this._entries.update(entries => entries.filter(e => e.id !== id));
+        return { data: null, error: null };
+      }
+      return { data: null, error: 'Entry not found' };
+    }
+
     this.loaderService.show();
     try {
       const userResult = await supabase.auth.getUser();

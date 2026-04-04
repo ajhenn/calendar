@@ -95,10 +95,43 @@ export class DemoService {
       end_date: '2026-04-30',
       comments: 'Traffic delay',
       created: '2026-04-30T08:00:00Z'
-    }
-  ]);
+    }]);
 
   getDemoEntries(): CalendarEvent[] {
     return this.demoEntries();
+  }
+
+  addDemoEntry(entry: Omit<CalendarEvent, 'id' | 'created'>): CalendarEvent {
+    const newEntry: CalendarEvent = {
+      ...entry,
+      id: `demo-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      created: new Date().toISOString()
+    };
+    this.demoEntries.update(entries => [...entries, newEntry]);
+    return newEntry;
+  }
+
+  updateDemoEntry(id: string, updates: Partial<Omit<CalendarEvent, 'id' | 'created'>>): CalendarEvent | null {
+    let updatedEntry: CalendarEvent | null = null;
+    this.demoEntries.update(entries =>
+      entries.map(entry => {
+        if (entry.id === id) {
+          updatedEntry = { ...entry, ...updates };
+          return updatedEntry;
+        }
+        return entry;
+      })
+    );
+    return updatedEntry;
+  }
+
+  deleteDemoEntry(id: string): boolean {
+    const currentEntries = this.demoEntries();
+    const filteredEntries = currentEntries.filter(entry => entry.id !== id);
+    if (filteredEntries.length < currentEntries.length) {
+      this.demoEntries.set(filteredEntries);
+      return true;
+    }
+    return false;
   }
 }

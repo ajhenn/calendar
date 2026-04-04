@@ -28,7 +28,8 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              }
+              },
+              "src/calendar_favicon.ico"
             ],
             "styles": [
               "src/material-theme.scss",
