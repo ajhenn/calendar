@@ -47,7 +47,7 @@ export class HeaderComponent {
 
   isDemoMode = computed(() => this.calendarService.isDemoMode());
 
-  isCalendarActive = computed(() => this.currentRoute().includes('/calendar'));
+  isCalendarActive = computed(() => this.currentRoute().includes('/home'));
   isDashboardActive = computed(() => this.currentRoute().includes('/dashboard'));
 
 

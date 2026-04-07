@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { provideRouter, withInMemoryScrolling } from '@angular/router';
+import { provideRouter, withHashLocation, withInMemoryScrolling } from '@angular/router';
 import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { App } from './app/app';
@@ -13,7 +13,8 @@ bootstrapApplication(App, {
       withInMemoryScrolling({
         scrollPositionRestoration: 'top',
         anchorScrolling: 'enabled'
-      })
+      }),
+      withHashLocation()
     ),
     provideStore({ calendar: listReducer }),
     provideEffects([CalendarEffects])

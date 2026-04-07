@@ -40,6 +40,8 @@ export class CalendarComponent implements OnInit {
   isMobile = signal(false);
   isDemoMode = computed(() => this.calendarService.isDemoMode());
   teamOptions = computed(() => this.isDemoMode() ? DEMO_TEAM : CALENDAR_TEAM);
+  userName = signal('');
+  timer = signal(3);
 
   calendarOptions = signal<CalendarOptions>({
     plugins: [
@@ -105,7 +107,15 @@ export class CalendarComponent implements OnInit {
     const user = this.authService.getAuthState();
     if (user.isLoggedIn) {
       await this.calendarService.fetchEntries();
+      this.userName.set(user.user?.displayName ?? '');
       this.calendarVisible.set(true);
+      const timerId = setInterval(() => {
+        this.timer.update((val) => {
+          if (val <= 1) clearInterval(timerId);
+          return Math.max(0, val - 1);
+        });
+      }, 1000);
+      this.destroyRef.onDestroy(() => clearInterval(timerId));
     } else {
       this.store.dispatch(CalendarActions.routerGoToSignIn({ isTimedOut: true }));
     }

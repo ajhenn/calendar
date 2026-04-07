@@ -54,16 +54,21 @@
               </div>
             }
 
+            @if (this.resetSuccessMessage()) {
+              <div class="bg-green-50 border border-green-200 rounded-md p-4">
+                <p class="text-sm text-green-700" [innerHTML]="this.resetSuccessMessage()"></p>
+              </div>
+            }
+
             <!-- @if (signInTimeout()) {
               <div class="bg-red-50 border border-red-200 rounded-md p-4">
                 <p class="text-sm text-grey-700">Your session has timed out. Please sign in again.</p>
               </div>
             } -->
 
-            <!-- <div class="flex items-center justify-between pt-2">
-              <mat-checkbox [formField]="signInForm.rememberMe" class="text-sm font-light">Remember me</mat-checkbox>
-              <a href="#" class="text-sm text-indigo-600 hover:text-indigo-800 font-light transition-colors">Forgot password?</a>
-            </div> -->
+            <div class="flex items-center justify-between pt-2">
+              <a href="javascript:void(0);" (click)="openForgotPwModal()" class="text-sm text-indigo-600 hover:text-indigo-800 font-light transition-colors">Forgot password?</a>
+            </div>
 
             <div class="flex flex-col gap-4 pt-4">
               <button mat-raised-button color="primary" type="submit"

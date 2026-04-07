@@ -1,4 +1,4 @@
-import { Component, effect, inject, linkedSignal, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { debounce, email, form, FormField, pattern, required } from '@angular/forms/signals';
 import { MatCardModule } from '@angular/material/card';
@@ -9,6 +9,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import * as CalendarActions from '../../store/calendar.actions';
 import { SignInService } from '../../services/sign-in.service';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-sign-in',
@@ -18,6 +21,8 @@ import { Router } from '@angular/router';
 })
 export class SignInComponent {
 
+  private dialog = inject(MatDialog);
+  private destroyRef = inject(DestroyRef);
   private router = inject(Router);
   private store = inject(Store);
   private signInService = inject(SignInService);
@@ -57,6 +62,8 @@ export class SignInComponent {
     pattern(schemaPath.password, /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{10,}$/, {message: 'Password must be at least 10 characters long and include uppercase, lowercase, and a number.'});
   });
 
+  resetSuccessMessage = signal<string | null>(null);
+
   toggleCreateAccount() {
     this.isTransitioning.set(true);
     this.signInError.set(null);
@@ -83,14 +90,23 @@ export class SignInComponent {
       const response = await this.signInService.signIn(this.signInModel().email, this.signInModel().password);
       
       if (response.error) {
-        this.signInError.set('Oh shit, it\'s broke can\'t log you in! Contact Andy for help. <br><br> Error:' + response.error);
+        this.signInError.set(this.setErrorMsg(response.error));
       } else {
         this.goToCalendar();
       }
     } catch (error: any) {
       const errorMessage = error?.message || 'An unexpected error occurred';
-      this.signInError.set('Oh shit, it\'s broke can\'t log you in! Contact Andy for help. <br><br> Error:' + errorMessage);
+      this.signInError.set(this.setErrorMsg(errorMessage));
     }
+  }
+
+  setErrorMsg(errorMsg: string | null) {
+    const errorMap: Record<string, string> = {
+      'Invalid login credentials': 'Incorrect email or password. Please try again.',
+      'Account Creation Fail': 'We\'re having trouble creating your account. Please try again.',
+      'default': 'Oh shit, something broke! Contact Andy for help. <br><br> Error: ' + errorMsg
+    };
+    return (errorMsg && errorMap[errorMsg]) || errorMap['default'];
   }
 
   async handleCreateAccount(event: Event) {
@@ -105,13 +121,34 @@ export class SignInComponent {
         this.createAccountError.set('Oh shit, can\'t create account! Contact Andy for help. <br><br> Error:' + response.error);
       } else {
         console.log('Sign-up successful:', response.data);
-        // Now login?
-        // this.goToCalendar();
+        const validAuthSignup = response?.data && response?.data?.role === 'authenticated';
+        if (validAuthSignup) {
+          this.goToCalendar();
+        } else {
+          this.createAccountError.set(this.setErrorMsg('Account Creation Fail'));
+        }
       }
     } catch (error: any) {
       const errorMessage = error?.message || 'An unexpected error occurred';
-      this.createAccountError.set('Oh shit, can\'t create account! Contact Andy for help. <br><br> Error:' + errorMessage);
+      this.createAccountError.set(this.setErrorMsg(errorMessage));
     }
+  }
+
+  openForgotPwModal() {
+    this.dialog.open(ForgotPasswordComponent, {
+      data: {
+        email: this.signInModel().email ?? ''
+      }
+    }).afterClosed()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(({ email, successMsg } = {}) => {
+        console.log('modal close data', { email, successMsg });
+        if (successMsg) {
+          this.resetSuccessMessage.set(successMsg);
+        }
+      });
   }
 
 }

@@ -7,7 +7,11 @@ export const routes: Routes = [
     loadComponent: () => import('./widgets/sign-in/sign-in.component').then(m => m.SignInComponent)
   },
   {
-    path: 'calendar',
+    path: 'reset-password',
+    loadComponent: () => import('./widgets/reset-password/reset-password.component').then(m => m.ResetPasswordComponent)
+  },
+  {
+    path: 'home',
     loadComponent: () => import('./widgets/calendar/calendar.component').then(m => m.CalendarComponent)
   },
   {

@@ -13,7 +13,7 @@ export class CalendarEffects {
     () =>
       this.actions$.pipe(
         ofType(CalendarActions.routerGoToCalendar),
-        tap(() => this.router.navigate(['/calendar'], { queryParamsHandling: 'merge' }))
+        tap(() => this.router.navigate(['/home'], { queryParamsHandling: 'merge' }))
       ),
     { dispatch: false }
   );

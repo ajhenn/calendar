@@ -22,7 +22,6 @@
             },
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "deployUrl": "/calendar/",
             "tsConfig": "tsconfig.app.json",
             "assets": [
               {
@@ -38,6 +37,7 @@
           },
           "configurations": {
             "production": {
+              "baseHref": "/calendar/",
               "budgets": [
                 {
                   "type": "initial",

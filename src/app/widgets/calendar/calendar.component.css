@@ -129,3 +129,18 @@
     .fc .fc-daygrid-day-number {
         font-size: 0.82rem;
     }
+
+    .welcome-exit {
+        animation: fadeOutDownSwipe 2000ms cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+    }
+
+    @keyframes fadeOutDownSwipe {
+  from {
+    opacity: 1;
+    transform: translateY(0) translateX(10);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(0) translateX(500px);
+  }
+}

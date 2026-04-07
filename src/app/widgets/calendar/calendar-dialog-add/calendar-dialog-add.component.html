@@ -40,7 +40,13 @@
 
     <mat-form-field appearance="outline" class="calendar-dialog-fw">
       <mat-label>Comments</mat-label>
-      <input matInput formControlName="comments">
+      <textarea 
+        matInput 
+        formControlName="comments" 
+        cdkTextareaAutosize 
+        cdkAutosizeMinRows="1" 
+        cdkAutosizeMaxRows="5">
+      </textarea>
     </mat-form-field>
 
   </form>

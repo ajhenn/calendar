@@ -24,3 +24,7 @@ export const routerGoToSignIn = createAction(
   '[Router] Go To Sign In',
   props<{ isTimedOut?: boolean }>()
 );
+
+export const routerGoToResetPassword = createAction(
+  '[Router] Go To Reset Password'
+);

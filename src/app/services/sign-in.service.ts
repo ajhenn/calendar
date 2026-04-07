@@ -75,4 +75,40 @@ export class SignInService {
     }
   }
 
+  async forgotPassword(email: string): Promise<AuthResponse> {
+    this.loaderService.show();
+    try {
+      const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: `${window.location.origin}#/reset-password`
+      });
+      if (error) {
+        return { data: null, error: error.message };
+      }
+      console.log('Password reset email sent:', data);
+      return { data, error: null };
+    } catch (err: any) {
+      const errorMessage = err?.message || 'An unexpected error occurred during sign in';
+      return { data: null, error: errorMessage };
+    } finally {
+      this.loaderService.hide();
+    }
+  }
+
+  async resetPassword(password: string): Promise<AuthResponse> {
+    this.loaderService.show();
+    try {
+      const { data, error } = await supabase.auth.updateUser({ password });
+      if (error) {
+        return { data: null, error: error.message };
+      }
+      console.log('Password reset email sent:', data);
+      return { data, error: null };
+    } catch (err: any) {
+      const errorMessage = err?.message || 'An unexpected error occurred during sign in';
+      return { data: null, error: errorMessage };
+    } finally {
+      this.loaderService.hide();
+    }
+  }
+
 }
