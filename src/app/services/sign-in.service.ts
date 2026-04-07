@@ -79,7 +79,7 @@ export class SignInService {
     this.loaderService.show();
     try {
       const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: `${window.location.origin}#/reset-password`
+          redirectTo: 'https://ajhenn.github.io/calendar/#/reset-password'
       });
       if (error) {
         return { data: null, error: error.message };
