@@ -2,8 +2,8 @@ import { Component, computed, DestroyRef, effect, inject, OnInit, signal } from 
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
-import { FullCalendarComponent, FullCalendarModule } from '@fullcalendar/angular';
-import { CalendarOptions, DateSelectArg, EventClickArg, EventApi, EventInput } from '@fullcalendar/core';
+import { FullCalendarModule } from '@fullcalendar/angular';
+import { CalendarOptions, DateSelectArg, EventClickArg, EventInput } from '@fullcalendar/core';
 import * as CalendarActions from '../../store/calendar.actions';
 import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -75,22 +75,14 @@ export class CalendarComponent implements OnInit {
     },
     initialView: 'dayGridMonth',
     events: [],
-    // initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
     weekends: true,
     editable: true,
     selectable: true,
+    selectLongPressDelay: 0,
     selectMirror: true,
     dayMaxEvents: true,
     select: (selectInfo: DateSelectArg) => this.handleDateSelect(selectInfo),
     eventClick: (clickInfo: EventClickArg) => this.handleEventClick(clickInfo),
-    // select: this.handleDateSelect.bind(this),
-    // eventClick: this.handleEventClick.bind(this),
-    // eventsSet: this.handleEvents.bind(this)
-    /* you can update a remote database when these fire:
-    eventAdd:
-    eventChange:
-    eventRemove:
-    */
   });
 
   async ngOnInit(): Promise<void> {
