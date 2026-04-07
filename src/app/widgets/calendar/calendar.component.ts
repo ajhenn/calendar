@@ -53,7 +53,7 @@ export class CalendarComponent implements OnInit {
     headerToolbar: {
       left: 'prev,next today',
       center: 'title',
-      right: ''
+      right: 'dayGridMonth,listWeek,dashboard'
     },
     footerToolbar: {
       left: '',
@@ -78,8 +78,8 @@ export class CalendarComponent implements OnInit {
     weekends: true,
     editable: true,
     selectable: true,
-    selectLongPressDelay: 0,
-    selectMirror: true,
+    selectLongPressDelay: 300,
+    selectMirror: false,
     dayMaxEvents: true,
     select: (selectInfo: DateSelectArg) => this.handleDateSelect(selectInfo),
     eventClick: (clickInfo: EventClickArg) => this.handleEventClick(clickInfo),
@@ -123,11 +123,11 @@ export class CalendarComponent implements OnInit {
         this.calendarOptions.update(options => ({
           ...options,
           initialView: 'dayGridMonth',
-          headerToolbar: {
-            left: 'prev,today,next',
+          headerToolbar: mobile ? {
+            left: 'prev,next',
             center: 'title',
-            right: mobile ? '' : 'dayGridMonth,listWeek,dashboard'
-          },
+            right: 'today'
+          } : { ...options.headerToolbar, right: 'dayGridMonth,listWeek,dashboard' },
           footerToolbar: mobile ? {
             left: '',
             center: 'dayGridMonth,listWeek,dashboard',
