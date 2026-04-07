@@ -12,8 +12,12 @@
     <div class="calendar-container">
         <full-calendar [options]="calendarOptions()">
             <ng-template #eventContent let-arg>
-                <b>{{arg.timeText}}</b>
-                <i>{{arg.event.title}}</i>
+                <div [title]="arg.event.title" class="cal-title-overlap">
+                    @if (arg.timeText) {
+                        <b>{{arg.timeText}}</b>
+                    }
+                    <i>{{arg.event.title}}</i>
+                </div>
             </ng-template>
         </full-calendar>
     </div>
