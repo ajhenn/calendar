@@ -1,9 +1,10 @@
 name: Deploy Angular to GitHub Pages
 
 on:
-  push:
-    branches:
-      - main  # Deploy on push to main branch
+  workflow_dispatch: # Only runs manually
+  # push:
+  #   branches:
+  #     - main  # Deploy on push to main branch
 
 jobs:
   build-and-deploy:
