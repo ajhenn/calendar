@@ -14,4 +14,5 @@ export class WhoIsOutComponent {
   private readonly calendarService = inject(CalendarService)
   colorForName = colorForName;
   todaysEntries = this.calendarService.todaysEntries;
+  isMonToThu = this.calendarService.isMonToThu;
 }

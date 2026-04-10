@@ -1,6 +1,6 @@
 @if (todaysEntries().length > 0) {
     <div class="banner">
-        <span class="label">Today's Summary</span>
+        <span class="label">For Today</span>
         <div class="chips">
             @for (entry of todaysEntries(); track entry.id) {
                 <div class="chip" [style.background]="colorForName(entry.name) + '22'"
@@ -13,7 +13,7 @@
             }
         </div>
     </div>
-} @else {
+} @else if (isMonToThu()) {
     <div class="banner banner-empty">
         <span class="none-out">Everyone is in today 🎉</span>
     </div>

@@ -31,6 +31,10 @@ export class CalendarService {
     ].join('-');
     return this.entries().filter(e => e.start_date <= today && e.end_date >= today);
   });
+  isMonToThu = computed(() => {
+    const day = new Date().getDay();
+    return day >= 1 && day <= 4;
+  });
   isDemoMode = this._isDemoMode.asReadonly();
 
   async fetchEntries(): Promise<ServiceResponse<any>> {
