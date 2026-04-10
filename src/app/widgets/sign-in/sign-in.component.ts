@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { debounce, email, form, FormField, pattern, required } from '@angular/forms/signals';
 import { MatCardModule } from '@angular/material/card';
@@ -18,6 +18,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   imports: [FormField, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatCheckboxModule],
   templateUrl: './sign-in.component.html',
   styleUrl: './sign-in.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SignInComponent {
 

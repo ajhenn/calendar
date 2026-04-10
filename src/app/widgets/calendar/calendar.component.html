@@ -1,14 +1,15 @@
 @if (calendarVisible()) {
-    @if (isDemoMode()) {
-        <div class="calendar-mobile-banner" role="status" aria-live="polite">
+    @if (isDemoMode() && timer() > 0) {
+        <div class="calendar-mobile-banner" role="status" aria-live="polite"
+            [class.welcome-exit]="timer() <= 1">
             Not all features are available in demo mode. Contact owner for full experience!
         </div>
     } @else {
-        <!-- @if (timer() > 0) {
-            <h1 class="text-center text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 text-white p-8 mb-8 rounded-t-lg" [class.welcome-exit]="timer() === 1">Welcome, {{userName()}}!</h1>
-        } -->
+        @if (timer() > 0) {
+            <h1 class="text-center text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 text-white p-8 mb-8 rounded-t-lg" [class.welcome-exit]="timer() <= 1">Welcome, {{userName()}}!</h1>
+        }
     }
-
+    <app-who-is-out />
     <div class="calendar-container">
         <full-calendar [options]="calendarOptions()">
             <ng-template #eventContent let-arg>

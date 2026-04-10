@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -13,6 +13,7 @@ import { debounce, form, FormField, required, email } from '@angular/forms/signa
     MatIconModule, MatInputModule, MatButtonModule],
   templateUrl: './forgot-password.component.html',
   styleUrl: './forgot-password.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ForgotPasswordComponent {
 

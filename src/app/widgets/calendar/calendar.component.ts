@@ -1,4 +1,4 @@
-import { Component, computed, DestroyRef, effect, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, effect, inject, OnInit, signal } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
@@ -18,13 +18,14 @@ import { CalendarDialogEditComponent, CalendarDialogResult } from './calendar-di
 import { CALENDAR_REASONS, CALENDAR_TEAM, DEMO_TEAM } from '../../models/calendar-event.model';
 import { AuthService } from '../../services/auth-state.service';
 import { Store } from '@ngrx/store';
-import { ActivatedRoute } from '@angular/router';
+import { WhoIsOutComponent } from '../who-is-out/who-is-out.component';
 
 @Component({
   selector: 'app-calendar',
-  imports: [FullCalendarModule],
+  imports: [FullCalendarModule, WhoIsOutComponent],
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CalendarComponent implements OnInit {
 
@@ -33,7 +34,6 @@ export class CalendarComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
   private store = inject(Store);
   private authService = inject(AuthService);
-  private route = inject(ActivatedRoute);
   private breakpointObserver = inject(BreakpointObserver);
 
   calendarVisible = signal(false);
@@ -41,7 +41,7 @@ export class CalendarComponent implements OnInit {
   isDemoMode = computed(() => this.calendarService.isDemoMode());
   teamOptions = computed(() => this.isDemoMode() ? DEMO_TEAM : CALENDAR_TEAM);
   userName = signal('');
-  timer = signal(3);
+  timer = signal(6);
 
   calendarOptions = signal<CalendarOptions>({
     plugins: [
@@ -88,29 +88,23 @@ export class CalendarComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.observeScreenSize();
 
-    const isDemo = this.route.snapshot.queryParams['demo'] === 'true';
-    if (isDemo) {
-      this.calendarService.enableDemoMode();
-      await this.calendarService.fetchEntries();
-      this.calendarVisible.set(true);
-      return;
-    }
+    const auth = this.authService.getAuthState();
 
-    const user = this.authService.getAuthState();
-    if (user.isLoggedIn) {
-      await this.calendarService.fetchEntries();
-      this.userName.set(user.user?.displayName ?? '');
-      this.calendarVisible.set(true);
-      const timerId = setInterval(() => {
-        this.timer.update((val) => {
-          if (val <= 1) clearInterval(timerId);
-          return Math.max(0, val - 1);
-        });
-      }, 1000);
-      this.destroyRef.onDestroy(() => clearInterval(timerId));
-    } else {
-      this.store.dispatch(CalendarActions.routerGoToSignIn({ isTimedOut: true }));
-    }
+    await this.calendarService.fetchEntries();
+
+    this.userName.set(auth.user?.displayName ?? '');
+    this.startSessionTimer();
+    this.calendarVisible.set(true);
+  }
+
+  private startSessionTimer(): void {
+    const timerId = setInterval(() => {
+      this.timer.update((val) => {
+        if (val <= 1) clearInterval(timerId);
+        return Math.max(0, val - 1);
+      });
+    }, 1000);
+    this.destroyRef.onDestroy(() => clearInterval(timerId));
   }
 
   private observeScreenSize(): void {

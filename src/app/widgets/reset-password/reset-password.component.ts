@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { form, FormField, required } from '@angular/forms/signals';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -14,6 +14,7 @@ import { MatCardModule } from '@angular/material/card';
   imports: [FormField, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule],
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ResetPasswordComponent {
   private router = inject(Router);

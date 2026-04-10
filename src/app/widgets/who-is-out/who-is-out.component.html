@@ -1,0 +1,20 @@
+@if (todaysEntries().length > 0) {
+    <div class="banner">
+        <span class="label">Today's Summary</span>
+        <div class="chips">
+            @for (entry of todaysEntries(); track entry.id) {
+                <div class="chip" [style.background]="colorForName(entry.name) + '22'"
+                    [style.color]="colorForName(entry.name)"
+                    [style.border-color]="colorForName(entry.name) + '44'">
+                    <span class="dot" [style.background]="colorForName(entry.name) + '44'"></span>
+                    <span class="name">{{ entry.name }}</span>
+                    <span class="reason">{{ entry.reason }}</span>
+                </div>
+            }
+        </div>
+    </div>
+} @else {
+    <div class="banner banner-empty">
+        <span class="none-out">Everyone is in today 🎉</span>
+    </div>
+}

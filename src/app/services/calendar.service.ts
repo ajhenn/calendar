@@ -1,4 +1,4 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { supabase } from '../supabase.client';
 import { LoaderService } from './loader.service';
 import { CalendarEvent } from '../models/calendar-event.model';
@@ -22,6 +22,15 @@ export class CalendarService {
   private _entries = signal<CalendarEvent[]>([]);
   private _isDemoMode = signal<boolean>(false);
   entries = this._entries.asReadonly();
+  todaysEntries = computed(() => {
+    const now = new Date();
+    const today = [
+      now.getFullYear(),
+      String(now.getMonth() + 1).padStart(2, '0'),
+      String(now.getDate()).padStart(2, '0')
+    ].join('-');
+    return this.entries().filter(e => e.start_date <= today && e.end_date >= today);
+  });
   isDemoMode = this._isDemoMode.asReadonly();
 
   async fetchEntries(): Promise<ServiceResponse<any>> {

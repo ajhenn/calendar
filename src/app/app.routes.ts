@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/sign-in', pathMatch: 'full' },
@@ -12,11 +13,13 @@ export const routes: Routes = [
   },
   {
     path: 'home',
-    loadComponent: () => import('./widgets/calendar/calendar.component').then(m => m.CalendarComponent)
+    loadComponent: () => import('./widgets/calendar/calendar.component').then(m => m.CalendarComponent),
+    canActivate: [authGuard]
   },
   {
     path: 'dashboard',
-    loadComponent: () => import('./widgets/dashboard/dashboard.component').then(m => m.DashboardComponent)
+    loadComponent: () => import('./widgets/dashboard/dashboard.component').then(m => m.DashboardComponent),
+    canActivate: [authGuard]
   },
   { path: '**', redirectTo: '/sign-in' }
 ];
