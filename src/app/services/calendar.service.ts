@@ -36,6 +36,22 @@ export class CalendarService {
     return day >= 1 && day <= 4;
   });
   isDemoMode = this._isDemoMode.asReadonly();
+  private _sessionTimer = signal(6);
+  public readonly sessionTimer = this._sessionTimer.asReadonly();
+  private timerStarted = false;
+  startSessionTimer(): void {
+    if (this.timerStarted) { return; }
+    this.timerStarted = true;
+
+    const intervalId = setInterval(() => {
+      this._sessionTimer.update((val) => {
+        if (val <= 1) {
+          clearInterval(intervalId);
+        }
+        return Math.max(0, val - 1);
+      });
+    }, 1000);
+  }
 
   async fetchEntries(): Promise<ServiceResponse<any>> {
     if (this._isDemoMode()) {

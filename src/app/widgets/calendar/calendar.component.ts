@@ -36,14 +36,14 @@ export class CalendarComponent implements OnInit {
   private authService = inject(AuthService);
   private breakpointObserver = inject(BreakpointObserver);
 
-  calendarVisible = signal(false);
-  isMobile = signal(false);
-  isDemoMode = computed(() => this.calendarService.isDemoMode());
-  teamOptions = computed(() => this.isDemoMode() ? DEMO_TEAM : CALENDAR_TEAM);
-  userName = signal('');
-  timer = signal(6);
+  protected readonly calendarVisible = signal(false);
+  protected readonly isMobile = signal(false);
+  protected readonly isDemoMode = computed(() => this.calendarService.isDemoMode());
+  protected readonly teamOptions = computed(() => this.isDemoMode() ? DEMO_TEAM : CALENDAR_TEAM);
+  protected readonly userName = signal('');
+  protected readonly timer = this.calendarService.sessionTimer;
 
-  calendarOptions = signal<CalendarOptions>({
+  protected readonly calendarOptions = signal<CalendarOptions>({
     plugins: [
       interactionPlugin,
       dayGridPlugin,
@@ -93,18 +93,8 @@ export class CalendarComponent implements OnInit {
     await this.calendarService.fetchEntries();
 
     this.userName.set(auth.user?.displayName ?? '');
-    this.startSessionTimer();
+    this.calendarService.startSessionTimer();
     this.calendarVisible.set(true);
-  }
-
-  private startSessionTimer(): void {
-    const timerId = setInterval(() => {
-      this.timer.update((val) => {
-        if (val <= 1) clearInterval(timerId);
-        return Math.max(0, val - 1);
-      });
-    }, 1000);
-    this.destroyRef.onDestroy(() => clearInterval(timerId));
   }
 
   private observeScreenSize(): void {
