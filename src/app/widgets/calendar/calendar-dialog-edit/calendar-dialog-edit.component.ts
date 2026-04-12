@@ -68,13 +68,10 @@ export class CalendarDialogEditComponent {
 
   save(): void {
     if (this.editEventForm.valid) {
-      console.log('PTO Request Submitted:', this.editEventForm.value);
       this.dialogRef.close({
         action: 'edit',
         payload: this.editEventForm.getRawValue()
       } as CalendarDialogResult);
-    } else {
-      console.log('editEventForm Form is invalid');
     }
   }
 

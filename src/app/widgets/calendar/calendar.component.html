@@ -22,4 +22,13 @@
             </ng-template>
         </full-calendar>
     </div>
+} @else if (this.calendarFailure()) {
+    <div class="calendar-failure">
+        <div class="bg-red-50 border border-red-200 rounded-md p-4 text-center mb-5">
+            <p class="text-sm text-red-700" [innerHTML]="calendarFailure()"></p>
+        </div>
+        <button mat-stroked-button type="button" class="w-full py-3 text-lg font-semibold text-purple-600 border-purple-600 hover:bg-purple-50 transition-all duration-300 transform hover:scale-105" (click)="backToSignIn()">
+            Back to Sign In
+        </button>
+    </div>
 }

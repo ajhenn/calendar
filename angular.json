@@ -28,7 +28,9 @@
                 "glob": "**/*",
                 "input": "public"
               },
-              "src/calendar_favicon.ico"
+              "src/calendar_favicon.ico",
+              "src/calendar_app_icon_shadow.jpg",
+              "src/calendar_app_icon.jpg"
             ],
             "styles": [
               "src/material-theme.scss",

@@ -1,0 +1,1 @@
+import{Nc as n,Ya as i,ca as e}from"./chunk-FOGNVDA3.js";var d=(()=>{class t{static \u0275fac=function(o){return new(o||t)};static \u0275mod=i({type:t});static \u0275inj=e({imports:[n]})}return t})();export{d as a};

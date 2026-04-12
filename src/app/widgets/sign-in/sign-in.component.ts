@@ -35,6 +35,7 @@ export class SignInComponent {
      this.router.currentNavigation()?.extras.state?.['isTimedOut'] ?? false
   );
   createAccountError = signal<string | null>(null);
+  createAccountSuccess = signal<string | null>(null);
 
   signInModel = signal({
     email: '',
@@ -51,7 +52,9 @@ export class SignInComponent {
   createAccountModel = signal({
     name: '',
     email: '',
-    password: ''
+    password: '',
+    hasInviteCode: true,
+    inviteCode: ''
   });
   createAccountForm = form(this.createAccountModel, (schemaPath) => {
     required(schemaPath.name, {message: 'Name is required.'});
@@ -61,6 +64,8 @@ export class SignInComponent {
     debounce(schemaPath.password, 500);
     required(schemaPath.password, {message: 'Password is required.'});
     pattern(schemaPath.password, /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{10,}$/, {message: 'Password must be at least 10 characters long and include uppercase, lowercase, and a number.'});
+    required(schemaPath.inviteCode, {message: 'Invite code is required.'});
+    debounce(schemaPath.inviteCode, 500);
   });
 
   resetSuccessMessage = signal<string | null>(null);
@@ -105,6 +110,7 @@ export class SignInComponent {
     const errorMap: Record<string, string> = {
       'Invalid login credentials': 'Incorrect email or password. Please try again.',
       'Account Creation Fail': 'We\'re having trouble creating your account. Please try again.',
+      'Email not confirmed': 'Check for the email we sent and confirm your account before signing in.',
       'default': 'Oh shit, something broke! Contact Andy for help. <br><br> Error: ' + errorMsg
     };
     return (errorMsg && errorMap[errorMsg]) || errorMap['default'];
@@ -116,18 +122,17 @@ export class SignInComponent {
     this.signInTimeout.set(null);
 
     try {
-      const response = await this.signInService.signUp(this.createAccountModel().email, this.createAccountModel().password, this.createAccountModel().name);
+      const response = await this.signInService.signUp(
+        this.createAccountModel().email,
+        this.createAccountModel().password,
+        this.createAccountModel().name,
+        this.createAccountModel().inviteCode
+      );
       
       if (response.error) {
-        this.createAccountError.set('Oh shit, can\'t create account! Contact Andy for help. <br><br> Error:' + response.error);
+        this.createAccountError.set(response.error);
       } else {
-        console.log('Sign-up successful:', response.data);
-        const validAuthSignup = response?.data && response?.data?.role === 'authenticated';
-        if (validAuthSignup) {
-          this.goToCalendar();
-        } else {
-          this.createAccountError.set(this.setErrorMsg('Account Creation Fail'));
-        }
+        this.createAccountSuccess.set('Nice work! Check your email to confirm your account and sign in.');
       }
     } catch (error: any) {
       const errorMessage = error?.message || 'An unexpected error occurred';
@@ -145,7 +150,6 @@ export class SignInComponent {
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(({ email, successMsg } = {}) => {
-        console.log('modal close data', { email, successMsg });
         if (successMsg) {
           this.resetSuccessMessage.set(successMsg);
         }

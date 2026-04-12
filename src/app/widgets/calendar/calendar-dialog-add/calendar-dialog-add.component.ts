@@ -32,12 +32,8 @@ export class CalendarDialogAddComponent {
   });
 
   addEvent() {
-    console.log('Add Event Form Value:', this.addEventForm);
     if (this.addEventForm.valid) {
-      console.log('Event Request Submitted:', this.addEventForm.value);
       this.dialogRef.close(this.addEventForm.getRawValue());
-    } else {
-      console.log('Event Form is invalid');
     }
   }
 

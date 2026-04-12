@@ -19,10 +19,11 @@ import { CALENDAR_REASONS, CALENDAR_TEAM, DEMO_TEAM } from '../../models/calenda
 import { AuthService } from '../../services/auth-state.service';
 import { Store } from '@ngrx/store';
 import { WhoIsOutComponent } from '../who-is-out/who-is-out.component';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-calendar',
-  imports: [FullCalendarModule, WhoIsOutComponent],
+  imports: [FullCalendarModule, WhoIsOutComponent, MatButtonModule],
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -42,6 +43,11 @@ export class CalendarComponent implements OnInit {
   protected readonly teamOptions = computed(() => this.isDemoMode() ? DEMO_TEAM : CALENDAR_TEAM);
   protected readonly userName = signal('');
   protected readonly timer = this.calendarService.sessionTimer;
+  protected readonly calendarFailure = signal<string | null>(null);
+
+  private get isOwner(): boolean {
+    return this.authService.getAuthState().isOwner ?? false;
+  }
 
   protected readonly calendarOptions = signal<CalendarOptions>({
     plugins: [
@@ -53,11 +59,11 @@ export class CalendarComponent implements OnInit {
     headerToolbar: {
       left: 'prev,next today',
       center: 'title',
-      right: 'dayGridMonth,listWeek,dashboard'
+      right: this.isOwner ? 'dayGridMonth,listWeek,dashboard' : 'dayGridMonth,listWeek'
     },
     footerToolbar: {
       left: '',
-      center: 'dayGridMonth,listWeek,dashboard',
+      center: this.isOwner ? 'dayGridMonth,listWeek,dashboard' : 'dayGridMonth,listWeek',
       right: ''
     },
     buttonText: {
@@ -81,20 +87,34 @@ export class CalendarComponent implements OnInit {
     selectLongPressDelay: 300,
     selectMirror: false,
     dayMaxEvents: true,
-    select: (selectInfo: DateSelectArg) => this.handleDateSelect(selectInfo),
-    eventClick: (clickInfo: EventClickArg) => this.handleEventClick(clickInfo),
+    select: (selectInfo: DateSelectArg) => {
+      if (!this.isOwner) {
+        return;
+      }
+      this.handleDateSelect(selectInfo)
+    },
+    eventClick: (clickInfo: EventClickArg) => {
+      if (!this.isOwner) {
+        return;
+      }
+      this.handleEventClick(clickInfo)
+    }
   });
 
   async ngOnInit(): Promise<void> {
     this.observeScreenSize();
 
-    const auth = this.authService.getAuthState();
+    const { error } = await this.calendarService.fetchEntries();
 
-    await this.calendarService.fetchEntries();
-
-    this.userName.set(auth.user?.displayName ?? '');
-    this.calendarService.startSessionTimer();
-    this.calendarVisible.set(true);
+    if (error) {
+      this.calendarFailure.set(error);
+      this.calendarVisible.set(false);
+    } else {
+      this.calendarFailure.set(null);
+      this.userName.set(this.authService.getAuthState().user?.displayName ?? '');
+      this.calendarService.startSessionTimer();
+      this.calendarVisible.set(true);
+    }
   }
 
   private observeScreenSize(): void {
@@ -111,10 +131,14 @@ export class CalendarComponent implements OnInit {
             left: 'prev,next',
             center: 'title',
             right: 'today'
-          } : { ...options.headerToolbar, right: 'dayGridMonth,listWeek,dashboard' },
+          } : { 
+            left: 'prev,next today',
+            center: 'title',
+            right: this.isOwner ? 'dayGridMonth,listWeek,dashboard' : 'dayGridMonth,listWeek'
+          },
           footerToolbar: mobile ? {
             left: '',
-            center: 'dayGridMonth,listWeek,dashboard',
+            center: this.isOwner ? 'dayGridMonth,listWeek,dashboard' : 'dayGridMonth,listWeek',
             right: ''
           } : {
             left: '',
@@ -200,7 +224,6 @@ export class CalendarComponent implements OnInit {
       takeUntilDestroyed(this.destroyRef)
     )
     .subscribe(async ({ name, reason, start, end, comments }) => {
-      console.log('Received new event data from dialog: ', { name, reason, start, end, comments });
       const saved = await this.calendarService.addEntry({
         name,
         reason,
@@ -226,7 +249,6 @@ export class CalendarComponent implements OnInit {
   }
 
   handleEventClick(clickInfo: EventClickArg) {
-    console.log('clicked event = ', clickInfo.event);
     const entry = this.calendarService.entries().find(e => e.id === clickInfo.event.id);
     if (!entry) {
       console.error('Could not find calendar entry for event id ', clickInfo.event.id);
@@ -252,5 +274,10 @@ export class CalendarComponent implements OnInit {
         await this.calendarService.deleteEntry(entry.id);
       }
     });
+  }
+
+  backToSignIn() {
+    this.authService.logout();
+    this.store.dispatch(CalendarActions.routerGoToSignIn({isTimedOut: false}));
   }
 }

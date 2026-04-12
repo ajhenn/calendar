@@ -2,6 +2,10 @@
     padding: 1.5rem;
 }
 
+.calendar-failure {
+    padding: 25%;
+}
+
 .calendar-mobile-banner {
     background: #e0f7fa;
     color: #006064;

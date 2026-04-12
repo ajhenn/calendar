@@ -61,7 +61,8 @@ export class ResetPasswordComponent {
       } else if (data.session && data.session.user && data.session.user.role === 'authenticated') {
         console.log('getSession Session data:', data.session);
         this.loaderService.hide();
-        this.router.navigate(['/home']);
+        // TODO
+       // this.router.navigate(['/home']);
       }
     }).catch(error => {
       console.error('Error checking session:', error);

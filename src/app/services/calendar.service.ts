@@ -3,6 +3,7 @@ import { supabase } from '../supabase.client';
 import { LoaderService } from './loader.service';
 import { CalendarEvent } from '../models/calendar-event.model';
 import { DemoService } from './demo.service';
+import { AuthService } from './auth-state.service';
 
 /**
  * Generic service response wrapper
@@ -17,6 +18,7 @@ export interface ServiceResponse<T> {
 })
 export class CalendarService {
 
+  private authService = inject(AuthService);
   private loaderService = inject(LoaderService);
   private demoService = inject(DemoService);
   private _entries = signal<CalendarEvent[]>([]);
@@ -53,6 +55,10 @@ export class CalendarService {
     }, 1000);
   }
 
+  private get ownerId(): string | null {
+    return this.authService.getAuthState().currentOwnerId ?? null;
+  }
+
   async fetchEntries(): Promise<ServiceResponse<any>> {
     if (this._isDemoMode()) {
       // Return demo data
@@ -61,16 +67,16 @@ export class CalendarService {
       return { data: demoData, error: null };
     }
 
+    if (!this.ownerId) {
+      return { data: null, error: 'No calendar owner found!' };
+    }
+
     this.loaderService.show();
     try {
-      const userResult = await supabase.auth.getUser();
-      const user = userResult?.data?.user;
-      if (!user) return { data: null, error: 'Not authenticated' };
-
       const { data, error } = await supabase
         .from('calendar_events')
         .select('*')
-        .eq('user_id', user.id)
+        .eq('owner_id', this.ownerId)
         .order('start_date', { ascending: true });
 
       if (error) return { data: null, error: error.message };
@@ -97,13 +103,9 @@ export class CalendarService {
 
     this.loaderService.show();
     try {
-      const userResult = await supabase.auth.getUser();
-      const user = userResult?.data?.user;
-      if (!user) return { data: null, error: 'Not authenticated' };
-      console.log('Adding calendar entry:', entry);
       const { data, error } = await supabase
         .from('calendar_events')
-        .insert({ ...entry, user_id: user.id })
+        .insert(entry)
         .select()
         .single();
       if (error) return { data: null, error: error.message };
@@ -129,15 +131,10 @@ export class CalendarService {
 
     this.loaderService.show();
     try {
-      const userResult = await supabase.auth.getUser();
-      const user = userResult?.data?.user;
-      if (!user) return { data: null, error: 'Not authenticated' };
-      console.log('Updating calendar entry:', { id, updates });
       const { data, error } = await supabase
         .from('calendar_events')
         .update(updates)
         .in('id', [id])
-        .eq('user_id', user.id)
         .select()
         .single();
       if (error) return { data: null, error: error.message };
@@ -162,14 +159,10 @@ export class CalendarService {
 
     this.loaderService.show();
     try {
-      const userResult = await supabase.auth.getUser();
-      const user = userResult?.data?.user;
-      if (!user) return { data: null, error: 'Not authenticated' };
       const { error } = await supabase
         .from('calendar_events')
         .delete()
-        .in('id', [id])
-        .eq('user_id', user.id);
+        .in('id', [id]);
       if (error) return { data: null, error: error.message };
       this._entries.update(entries => entries.filter(e => e.id !== id));
       return { data: null, error: null };

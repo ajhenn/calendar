@@ -14,6 +14,7 @@ import { RouterLink } from '@angular/router';
 import { filter } from 'rxjs';
 import { signal } from '@angular/core';
 import { CalendarService } from '../../services/calendar.service';
+import { supabase } from '../../supabase.client';
 
 @Component({
   selector: 'app-header',
@@ -48,11 +49,14 @@ export class HeaderComponent {
 
   isDemoMode = computed(() => this.calendarService.isDemoMode());
 
+  showNavIcons = computed(() => (this.showSignOut() && this.authService.getAuthState().isOwner) || this.isDemoMode());
+
   isCalendarActive = computed(() => this.currentRoute().includes('/home'));
   isDashboardActive = computed(() => this.currentRoute().includes('/dashboard'));
 
 
   logout() {
+    supabase.auth.signOut();
     this.authService.logout();
     this.store.dispatch(CalendarActions.routerGoToSignIn({isTimedOut: false}));
   }
