@@ -45,18 +45,25 @@ export class DashboardComponent implements OnInit {
   analyticsData = computed(() => {
     const entries = this.calendarService.entries();
     const analytics = new Map<string, Map<string, number>>();
+    const MS_PER_DAY = 1000 * 60 * 60 * 24;
 
-    entries.forEach(entry => {
+    for (const entry of entries) {
       const person = entry.name;
       const reason = entry.reason;
 
       if (!analytics.has(person)) {
         analytics.set(person, new Map());
       }
-
       const personReasons = analytics.get(person)!;
-      personReasons.set(reason, (personReasons.get(reason) ?? 0) + 1);
-    });
+      
+      const start = new Date(entry.start_date).getTime();
+      const end = new Date(entry.end_date).getTime();
+      // Calculate inclusive days: (difference / msPerDay) + 1
+      // This ensures that an event on the same day counts as 1, and Mon-Tue counts as 2.
+      const dayCount = Math.round(Math.abs(end - start) / MS_PER_DAY) + 1;
+
+      personReasons.set(reason, (personReasons.get(reason) ?? 0) + dayCount);
+    }
 
     return Array.from(analytics, ([person, reasonMap]) => ({
       person,

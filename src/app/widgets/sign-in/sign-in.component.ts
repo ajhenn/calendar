@@ -12,10 +12,13 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-sign-in',
-  imports: [FormField, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatCheckboxModule],
+  imports: [FormField, MatCardModule, MatFormFieldModule,
+    MatInputModule, MatButtonModule, MatCheckboxModule,
+    MatIconModule],
   templateUrl: './sign-in.component.html',
   styleUrl: './sign-in.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -36,6 +39,7 @@ export class SignInComponent {
   );
   createAccountError = signal<string | null>(null);
   createAccountSuccess = signal<string | null>(null);
+  maskCreatePassword = signal(true);
 
   signInModel = signal({
     email: '',
@@ -86,6 +90,10 @@ export class SignInComponent {
 
   goToCalendar() {
     this.store.dispatch(CalendarActions.routerGoToCalendar());
+  }
+
+  toggleCreatePasswordMask() {
+    this.maskCreatePassword.update(v => !v);
   }
 
   async handleSignIn(event: Event) {
