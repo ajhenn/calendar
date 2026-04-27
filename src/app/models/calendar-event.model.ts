@@ -20,6 +20,7 @@ export const CALENDAR_REASONS = [
     'Called In',
     'Leaving Early',
     'Arriving Late',
+    'Off',
     'Billing'
   ];
 

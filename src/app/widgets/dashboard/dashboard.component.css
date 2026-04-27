@@ -157,6 +157,10 @@
   color: #2196f3;
 }
 
+.stat-icon.off {
+  color: #5d5d5d;
+}
+
 .stat-icon.billing {
   color: #9c27b0;
 }

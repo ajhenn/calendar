@@ -43,6 +43,12 @@
                   <div class="stat-label">Arriving Late</div>
                 </div>
 
+                <div class="stat-item" (click)="setSelectedReason('Off', person.person)" [class.selected]="selectedReason() === 'Off' && selectedPerson() === person.person" role="button" tabindex="0">
+                  <mat-icon class="stat-icon off">event_repeat</mat-icon>
+                  <div class="stat-value">{{ person.off }}</div>
+                  <div class="stat-label">Off</div>
+                </div>
+
                 @if (person.billing > 0) {
                   <div class="stat-item" (click)="setSelectedReason('Billing', person.person)" [class.selected]="selectedReason() === 'Billing' && selectedPerson() === person.person" role="button" tabindex="0">
                     <mat-icon class="stat-icon billing">attach_money</mat-icon>

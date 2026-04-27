@@ -71,6 +71,7 @@ export class DashboardComponent implements OnInit {
       sickDays: reasonMap.get('Called In') ?? 0,
       leaveEarly: reasonMap.get('Leaving Early') ?? 0,
       arriveLate: reasonMap.get('Arriving Late') ?? 0,
+      off: reasonMap.get('Off') ?? 0,
       billing: reasonMap.get('Billing') ?? 0,
       // Add more reason types as needed
       all: reasonMap
