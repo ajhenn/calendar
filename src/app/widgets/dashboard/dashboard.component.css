@@ -157,12 +157,16 @@
   color: #2196f3;
 }
 
+.stat-icon.leave-return {
+  color: #d5ce43;
+}
+
 .stat-icon.off {
-  color: #5d5d5d;
+  color: #9c27b0;
 }
 
 .stat-icon.billing {
-  color: #9c27b0;
+  color: #38793c;
 }
 
 .stat-value {

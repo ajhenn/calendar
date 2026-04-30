@@ -43,6 +43,12 @@
                   <div class="stat-label">Arriving Late</div>
                 </div>
 
+                <div class="stat-item" (click)="setSelectedReason('Leaving & Coming Back', person.person)" [class.selected]="selectedReason() === 'Leaving & Coming Back' && selectedPerson() === person.person" role="button" tabindex="0">
+                  <mat-icon class="stat-icon leave-return">360</mat-icon>
+                  <div class="stat-value">{{ person.leaveReturn }}</div>
+                  <div class="stat-label">Leaving & Coming Back</div>
+                </div>
+
                 <div class="stat-item" (click)="setSelectedReason('Off', person.person)" [class.selected]="selectedReason() === 'Off' && selectedPerson() === person.person" role="button" tabindex="0">
                   <mat-icon class="stat-icon off">event_repeat</mat-icon>
                   <div class="stat-value">{{ person.off }}</div>
