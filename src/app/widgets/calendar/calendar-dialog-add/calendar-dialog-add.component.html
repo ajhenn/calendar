@@ -18,7 +18,7 @@
     <mat-form-field appearance="outline" class="calendar-dialog-fw">
       <mat-label>Reason</mat-label>
        <mat-select formControlName="reason" required>
-        @for (reason of dialogData.reasons; track reason) {
+        @for (reason of reasons(); track reason) {
             <mat-option [value]="reason">{{ reason }}</mat-option>
         }
         </mat-select>

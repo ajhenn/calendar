@@ -109,62 +109,70 @@
         <mat-card-content class="p-8">
           @if (!createAccountSuccess()) {
             <form class="space-y-6" (submit)="handleCreateAccount($event)">
-              <mat-form-field appearance="outline" class="w-full">
-                <mat-label>Name</mat-label>
-                <input matInput type="text" [formField]="createAccountForm.name"
-                  placeholder="John Doe" autocomplete="name">
-                  <mat-icon matSuffix>badge</mat-icon>
-              </mat-form-field>
-              @if (createAccountForm.name().touched() && createAccountForm.name().invalid()) {
-                  @for (error of createAccountForm.name().errors(); track error.message) {
-                    <mat-error class="text-sm pl-2">{{ error.message }}</mat-error>
-                  }
-              }
+              <div class="flex flex-col">
+                <mat-form-field appearance="outline" class="w-full">
+                  <mat-label>Name</mat-label>
+                  <input matInput type="text" [formField]="createAccountForm.name"
+                    placeholder="John Doe" autocomplete="name">
+                    <mat-icon matSuffix>badge</mat-icon>
+                </mat-form-field>
+                @if (createAccountForm.name().touched() && createAccountForm.name().invalid()) {
+                    @for (error of createAccountForm.name().errors(); track error.message) {
+                      <mat-error class="text-sm pl-2">{{ error.message }}</mat-error>
+                    }
+                }
+            </div>
 
-              <mat-form-field appearance="outline" class="w-full">
-                <mat-label>Email</mat-label>
-                <input matInput type="email" [formField]="createAccountForm.email"
-                  placeholder="you@example.com" autocomplete="email">
-                  <mat-icon matSuffix>mail</mat-icon>
-              </mat-form-field>
-              @if (createAccountForm.email().touched() && createAccountForm.email().invalid()) {
-                  @for (error of createAccountForm.email().errors(); track error.message) {
-                    <mat-error class="text-sm pl-2">{{ error.message }}</mat-error>
-                  }
-              }
+              <div class="flex flex-col">
+                <mat-form-field appearance="outline" class="w-full">
+                  <mat-label>Email</mat-label>
+                  <input matInput type="email" [formField]="createAccountForm.email"
+                    placeholder="you@example.com" autocomplete="email">
+                    <mat-icon matSuffix>mail</mat-icon>
+                </mat-form-field>
+                @if (createAccountForm.email().touched() && createAccountForm.email().invalid()) {
+                    @for (error of createAccountForm.email().errors(); track error.message) {
+                      <mat-error class="text-sm pl-2">{{ error.message }}</mat-error>
+                    }
+                }
+              </div>
 
-              <mat-form-field appearance="outline" class="w-full">
-                <mat-label>Password</mat-label>
-                <input matInput [type]="maskCreatePassword() ? 'password' : 'text'" [formField]="createAccountForm.password"
-                  placeholder="••••••••" autocomplete="new-password">
-                  <button
-                    mat-icon-button
-                    matSuffix
-                    (click)="toggleCreatePasswordMask()"
-                    [attr.aria-label]="'Hide or show password'"
-                    [attr.aria-pressed]="!maskCreatePassword()"
-                    type="button"
-                  >
-                    <mat-icon>{{ maskCreatePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
-                  </button>
-              </mat-form-field>
-              @if (createAccountForm.password().touched() && createAccountForm.password().invalid()) {
-                  @for (error of createAccountForm.password().errors(); track error.message) {
-                    <mat-error class="text-sm pl-2">{{ error.message }}</mat-error>
-                  }
-              }
+              <div class="flex flex-col">
+                <mat-form-field appearance="outline" class="w-full">
+                  <mat-label>Password</mat-label>
+                  <input matInput [type]="maskCreatePassword() ? 'password' : 'text'" [formField]="createAccountForm.password"
+                    placeholder="••••••••" autocomplete="new-password">
+                    <button
+                      mat-icon-button
+                      matSuffix
+                      (click)="toggleCreatePasswordMask()"
+                      [attr.aria-label]="'Hide or show password'"
+                      [attr.aria-pressed]="!maskCreatePassword()"
+                      type="button"
+                    >
+                      <mat-icon>{{ maskCreatePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+                    </button>
+                </mat-form-field>
+                @if (createAccountForm.password().touched() && createAccountForm.password().invalid()) {
+                    @for (error of createAccountForm.password().errors(); track error.message) {
+                      <mat-error class="text-sm pl-2">{{ error.message }}</mat-error>
+                    }
+                }
+              </div>
 
               @if (createAccountForm.hasInviteCode().value() === true) {
-                <mat-form-field appearance="outline" class="w-full">
-                  <mat-label>Invite Code</mat-label>
-                  <input matInput type="text" [formField]="createAccountForm.inviteCode" autocomplete="off" autocorrect="off">
-                  <mat-icon matSuffix>group_add</mat-icon>
-                </mat-form-field>
-                @if (createAccountForm.inviteCode().touched() && createAccountForm.inviteCode().invalid()) {
-                  @for (error of createAccountForm.inviteCode().errors(); track error.message) {
-                  <mat-error class="text-sm pl-2">{{ error.message }}</mat-error>
+                <div class="flex flex-col">
+                  <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Invite Code</mat-label>
+                    <input matInput type="text" [formField]="createAccountForm.inviteCode" autocomplete="off" autocorrect="off">
+                    <mat-icon matSuffix>group_add</mat-icon>
+                  </mat-form-field>
+                  @if (createAccountForm.inviteCode().touched() && createAccountForm.inviteCode().invalid()) {
+                    @for (error of createAccountForm.inviteCode().errors(); track error.message) {
+                    <mat-error class="text-sm pl-2">{{ error.message }}</mat-error>
+                    }
                   }
-                }
+                </div>
               }
 
               @if (createAccountError()) {

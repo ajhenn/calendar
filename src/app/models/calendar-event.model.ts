@@ -12,7 +12,8 @@ export const CALENDAR_TEAM = [
     'Alex',
     'Sam',
     'Kristie',
-    'Krista'
+    'Krista',
+    'Everyone'
   ];
 
 export const CALENDAR_REASONS = [
@@ -23,6 +24,12 @@ export const CALENDAR_REASONS = [
     'Leaving & Coming Back',
     'Off',
     'Billing'
+  ];
+
+export const CALENDAR_OFFICE_REASONS = [
+    'Staff Meeting',
+    'Office Closed',
+    'Office Closing Early'
   ];
 
 export const DEMO_TEAM = [
