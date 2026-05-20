@@ -23,7 +23,7 @@
         <span class="calendar-dialog-label">End Date:</span>
         <span class="calendar-dialog-value">{{ dialogData.event.end_date | date }}</span>
       </div>
-    @if (dialogData.event.comments) {
+    @if (dialogData.event.comments && isOwner) {
       <div class="calendar-dialog-card full-width">
         <span class="calendar-dialog-label">Comments:</span>
         <span class="calendar-dialog-value">{{ dialogData.event.comments }}</span>
@@ -77,7 +77,7 @@
     </form>
   }
 </mat-dialog-content>
-
+@if (isOwner) {
 <mat-dialog-actions align="end">
   @if (viewMode === 'view') {
     <button mat-raised-button type="button" (click)="mode.set('edit')">Edit</button>
@@ -87,3 +87,4 @@
     <button mat-raised-button type="button" [disabled]="editEventForm.invalid" (click)="save()">Save</button>
   }
 </mat-dialog-actions>
+}

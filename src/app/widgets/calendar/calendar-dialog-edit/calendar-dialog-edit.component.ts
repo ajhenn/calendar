@@ -12,6 +12,7 @@ import { CALENDAR_OFFICE_REASONS, CalendarEvent } from '../../../models/calendar
 import { DatePipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { parseLocalDate } from '../../../utils/calendar.util';
+import { AuthService } from '../../../services/auth-state.service';
 
 export type DialogMode = 'view' | 'edit';
 
@@ -36,6 +37,12 @@ export interface CalendarDialogResult {
   styleUrl: './calendar-dialog-edit.component.css',
 })
 export class CalendarDialogEditComponent {
+
+  private readonly authService = inject(AuthService);
+
+  get isOwner(): boolean {
+    return this.authService.getAuthState().isOwner ?? false;
+  }
 
   protected readonly dialogData = inject<CalendarDialogData>(MAT_DIALOG_DATA);
   private readonly dialogRef = inject<MatDialogRef<CalendarDialogEditComponent>>(MatDialogRef);

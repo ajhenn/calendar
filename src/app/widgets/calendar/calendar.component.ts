@@ -20,10 +20,11 @@ import { AuthService } from '../../services/auth-state.service';
 import { Store } from '@ngrx/store';
 import { WhoIsOutComponent } from '../who-is-out/who-is-out.component';
 import { MatButtonModule } from '@angular/material/button';
+import { TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-calendar',
-  imports: [FullCalendarModule, WhoIsOutComponent, MatButtonModule],
+  imports: [FullCalendarModule, WhoIsOutComponent, MatButtonModule, TitleCasePipe],
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -94,9 +95,6 @@ export class CalendarComponent implements OnInit {
       this.handleDateSelect(selectInfo)
     },
     eventClick: (clickInfo: EventClickArg) => {
-      if (!this.isOwner) {
-        return;
-      }
       this.handleEventClick(clickInfo)
     }
   });

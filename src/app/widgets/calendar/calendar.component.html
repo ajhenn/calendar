@@ -6,7 +6,7 @@
         </div>
     } @else {
         @if (timer() > 0) {
-            <h1 class="text-center text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 text-white p-8 mb-8 rounded-t-lg" [class.welcome-exit]="timer() <= 1">Welcome, {{userName()}}!</h1>
+            <h1 class="text-center text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 text-white p-8 mb-8 rounded-t-lg" [class.welcome-exit]="timer() <= 1">Welcome, {{userName() | titlecase}}!</h1>
         }
     }
     <app-who-is-out />
