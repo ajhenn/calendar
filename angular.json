@@ -33,6 +33,9 @@
               "src/calendar_app_icon.jpg"
             ],
             "styles": [
+              "node_modules/@fullcalendar/angular/skeleton.css",
+              "node_modules/@fullcalendar/angular/themes/classic/theme.css",
+              "node_modules/@fullcalendar/angular/themes/classic/palette.css",
               "src/material-theme.scss",
               "src/styles.css"
             ]

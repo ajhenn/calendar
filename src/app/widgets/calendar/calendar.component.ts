@@ -2,13 +2,13 @@ import { ChangeDetectionStrategy, Component, computed, DestroyRef, effect, injec
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
-import { FullCalendarModule } from '@fullcalendar/angular';
-import { CalendarOptions, DateSelectArg, EventClickArg, EventInput } from '@fullcalendar/core';
+import { FullCalendarModule, CalendarOptions, DateSelectInfo, EventClickInfo, EventInput } from '@fullcalendar/angular';
 import * as CalendarActions from '../../store/calendar.actions';
-import interactionPlugin from '@fullcalendar/interaction';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import listPlugin from '@fullcalendar/list';
+import classicThemePlugin from '@fullcalendar/angular/themes/classic';
+import interactionPlugin from '@fullcalendar/angular/interaction';
+import dayGridPlugin from '@fullcalendar/angular/daygrid';
+import timeGridPlugin from '@fullcalendar/angular/timegrid';
+import listPlugin from '@fullcalendar/angular/list';
 import { v4 as uuid4 } from 'uuid';
 import { CalendarDialogAddComponent } from './calendar-dialog-add/calendar-dialog-add.component';
 import { filter } from 'rxjs';
@@ -52,6 +52,7 @@ export class CalendarComponent implements OnInit {
 
   protected readonly calendarOptions = signal<CalendarOptions>({
     plugins: [
+      classicThemePlugin,
       interactionPlugin,
       dayGridPlugin,
       timeGridPlugin,
@@ -67,14 +68,12 @@ export class CalendarComponent implements OnInit {
       center: this.isOwner ? 'dayGridMonth,listWeek,dashboard' : 'dayGridMonth,listWeek',
       right: ''
     },
-    buttonText: {
-      today: 'Today',
-      month: 'Month',
-      list: 'List',
-      prev: '<',
-      next: '>'
-    },
-    customButtons: {
+    buttons: {
+      today: { text: 'Today' },
+      month: { text: 'Month' },
+      list: { text: 'List' },
+      prev: { text: '<' },
+      next: { text: '>' },
       dashboard: {
         text: 'Dashboard',
         click: () => this.store.dispatch(CalendarActions.routerGoToDashboard())
@@ -88,13 +87,13 @@ export class CalendarComponent implements OnInit {
     selectLongPressDelay: 300,
     selectMirror: false,
     dayMaxEvents: true,
-    select: (selectInfo: DateSelectArg) => {
+    select: (selectInfo: DateSelectInfo) => {
       if (!this.isOwner) {
         return;
       }
       this.handleDateSelect(selectInfo)
     },
-    eventClick: (clickInfo: EventClickArg) => {
+    eventClick: (clickInfo: EventClickInfo) => {
       this.handleEventClick(clickInfo)
     }
   });
@@ -143,14 +142,6 @@ export class CalendarComponent implements OnInit {
             center: '',
             right: ''
           },
-          buttonText: {
-            today: 'Today',
-            month: 'Month',
-            list: 'List',
-            dashboard: 'Dashboard',
-            prev: '<',
-            next: '>'
-          },
           navLinks: true,
           aspectRatio: mobile ? 0.65 : 1.35,
           contentHeight: mobile ? 'auto' : undefined,
@@ -185,8 +176,7 @@ export class CalendarComponent implements OnInit {
       start: entry.start_date,
       end: this.toFullCalendarEnd(entry.end_date),
       allDay: true,
-      backgroundColor: colorForName(entry.name),
-      borderColor: colorForName(entry.name),
+      color: colorForName(entry.name),
       extendedProps: { comments: entry.comments }
     }));
 
@@ -196,7 +186,7 @@ export class CalendarComponent implements OnInit {
     }));
   });
 
-  handleDateSelect(selectInfo: DateSelectArg) {
+  handleDateSelect(selectInfo: DateSelectInfo) {
     const calendarApi = selectInfo.view.calendar;
     calendarApi.unselect(); // clear date selection
 
@@ -238,15 +228,14 @@ export class CalendarComponent implements OnInit {
           start: saved?.data?.start_date ?? start,
           end: this.toFullCalendarEnd(endDate),
           allDay: true,
-          backgroundColor: colorForName(saved.data?.name ?? name),
-          borderColor: colorForName(saved.data?.name ?? name),
+          color: colorForName(saved.data?.name ?? name),
           extendedProps: { comments: saved?.data?.comments ?? (comments || '') }
         });
       }
     });
   }
 
-  handleEventClick(clickInfo: EventClickArg) {
+  handleEventClick(clickInfo: EventClickInfo) {
     const entry = this.calendarService.entries().find(e => e.id === clickInfo.event.id);
     if (!entry) {
       console.error('Could not find calendar entry for event id ', clickInfo.event.id);

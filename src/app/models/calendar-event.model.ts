@@ -12,7 +12,6 @@ export const CALENDAR_TEAM = [
     'Alex',
     'Sam',
     'Kristie',
-    'Krista',
     'Everyone'
   ];
 
