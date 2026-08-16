@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { MatSnackBarRef, MAT_SNACK_BAR_DATA, MatSnackBarLabel } from '@angular/material/snack-bar';
 
 @Component({
@@ -8,6 +8,7 @@ import { MatSnackBarRef, MAT_SNACK_BAR_DATA, MatSnackBarLabel } from '@angular/m
              </span>
              `,
     styleUrl: './snackbar.component.css',
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatSnackBarLabel]
 })
 

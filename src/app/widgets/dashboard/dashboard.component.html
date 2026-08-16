@@ -4,7 +4,7 @@
     <p class="subtitle">View time-off per team member</p>
   </div>
 
-  <mat-tab-group class="analytics-tabs" dynamicHeight (selectedIndexChange)="setSelectedPerson(analyticsData()[$event]?.person)">
+  <mat-tab-group class="analytics-tabs" dynamicHeight (selectedIndexChange)="setSelectedPerson($safeNavigationMigration(analyticsData()[$event]?.person))">
     @for (person of analyticsData(); track person.person) {
       <mat-tab>
         <ng-template mat-tab-label>
