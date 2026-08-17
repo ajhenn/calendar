@@ -143,8 +143,9 @@ export class SignInService {
   async forgotPassword(email: string): Promise<AuthResponse> {
     this.loaderService.show();
     try {
+      const redirectTo = `${window.location.origin}${window.location.pathname}#/reset-password`;
       const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: 'https://ajhenn.github.io/calendar/#/reset-password'
+          redirectTo
       });
       if (error) {
         return { data: null, error: error.message };

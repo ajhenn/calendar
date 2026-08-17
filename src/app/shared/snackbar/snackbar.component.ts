@@ -8,7 +8,7 @@ import { MatSnackBarRef, MAT_SNACK_BAR_DATA, MatSnackBarLabel } from '@angular/m
              </span>
              `,
     styleUrl: './snackbar.component.css',
-    changeDetection: ChangeDetectionStrategy.Eager,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [MatSnackBarLabel]
 })
 

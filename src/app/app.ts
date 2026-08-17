@@ -7,7 +7,7 @@ import { LoaderComponent } from './shared/loader/loader.component';
   selector: 'app-root',
   imports: [RouterOutlet, HeaderComponent, LoaderComponent],
   templateUrl: './app.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './app.css'
 })
 export class App {

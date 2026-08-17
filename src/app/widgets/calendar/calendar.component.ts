@@ -82,15 +82,12 @@ export class CalendarComponent implements OnInit {
     initialView: 'dayGridMonth',
     events: [],
     weekends: true,
-    editable: true,
-    selectable: true,
+    editable: this.isOwner,
+    selectable: this.isOwner,
     selectLongPressDelay: 300,
     selectMirror: false,
     dayMaxEvents: true,
     select: (selectInfo: DateSelectInfo) => {
-      if (!this.isOwner) {
-        return;
-      }
       this.handleDateSelect(selectInfo)
     },
     eventClick: (clickInfo: EventClickInfo) => {
